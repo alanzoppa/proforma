@@ -1,0 +1,2 @@
+class FormValidationError < StandardError
+end
