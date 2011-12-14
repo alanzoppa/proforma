@@ -24,4 +24,10 @@ class String
   end
 end
 
-
+def dup_hash_with_string_keys hash
+  new_hash = Hash.new
+  hash.keys.each do |k|
+    new_hash[k.to_s] = hash[k]
+  end
+  return new_hash
+end

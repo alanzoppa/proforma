@@ -9,7 +9,7 @@ class Field
   include FieldValidation
   attr_accessor :type, :label_text, :name, :help_text, :html_id, :errors, :pretty_print, :required, :valid
 
-  def initialize(label_text=nil, attributes=nil, help_text=nil, required='false')
+  def initialize(label_text=nil, attributes=nil, help_text=nil, required=false)
     @label_text, @attributes, @help_text, @required = label_text, attributes, help_text, required
     @type = self.class.to_s.gsub(/Field$/, '').downcase
     @valid = true
@@ -35,6 +35,15 @@ class Field
     label_tag + to_html
   end
 
+  def complain_about_invalid_data(datum)
+    raise ArgumentError.new("A #{self.class} expects a #{String} as validation input") unless datum.class == String
+  end
+
+  def filled?(datum)
+    #If this returns true, the field is filled
+    !datum.nil? && !datum.empty?
+  end
+
 end
 
 class TextField < Field
@@ -44,11 +53,23 @@ class CheckboxField < Field
   def to_labeled_html
     to_html + label_tag
   end
+
+  def complain_about_invalid_data(datum)
+    raise ArgumentError.new("") unless [TrueClass, FalseClass].include?(datum.class)
+  end
+
+  def filled?(datum)
+    return false if datum.nil?
+    return false if datum.class == FalseClass
+    return true if datum.class == TrueClass
+  end
 end
 
 class ChoiceField < Field
-  def initialize(label_text, values, attributes = Hash.new)
-    @label_text, @values, @attributes = label_text, values, attributes
+  def initialize(label_text, values, attributes = Hash.new, help_text=nil, required=false)
+    @label_text, @values, @attributes, @help_text, @required = label_text, values, attributes, help_text, required
+    @type = self.class.to_s.gsub(/Field$/, '').downcase
+    @valid = true
   end
 
   def _html_options

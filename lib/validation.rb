@@ -2,12 +2,12 @@ module Validation
 
   def _validate_required_fields(data)
     raise "You can only validate a Hash" unless data.class == Hash
-    @raw_data = data
+    @raw_data = dup_hash_with_string_keys(data)
 
-    self.fields.each do |field|
-      if @raw_data[field.name].empty? && field.required?
-        field.valid = false
-      end
+    @fields.each do |field|
+      field_data = @raw_data[field.name.to_s]
+      field.complain_about_invalid_data(field_data) unless field_data.nil?
+      field.valid = false if field.required? && !field.filled?(field_data)
     end
   end
 
