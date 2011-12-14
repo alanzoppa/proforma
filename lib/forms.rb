@@ -1,4 +1,5 @@
 require 'validation'
+require 'exceptions'
 
 class Form
   include TestModule if $test_env
@@ -9,7 +10,9 @@ class Form
     _define_defaults
     _initialize_fields
     _prepare_getters
-    _error_if_required_fields_missing
+    unless data.nil?
+      _validate_required_fields(data)
+    end
   end
 
   def redefine_defaults
@@ -29,7 +32,7 @@ class Form
       # the field itself
       # the field's name cast as string with the leading "@@" stripped
       #
-      field = self.class.send("class_variable_get", v)
+      field = self.class.send("class_variable_get", v).dup
       field_name = v.to_s.gsub(/^@@/, '')
       __flatten_fields(field, field_name)
     }
@@ -70,6 +73,10 @@ class Form
 
   def get_field field
     return get_group(field)[:field]
+  end
+
+  def get_instance instance
+    return get_group(instance)[:instance]
   end
 
   def get_label_tag field

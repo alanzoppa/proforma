@@ -1,2 +1,2 @@
-class FormValidationError < StandardError
+class FieldValidationError < StandardError
 end

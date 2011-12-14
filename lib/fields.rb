@@ -1,14 +1,18 @@
 $: << File.dirname(__FILE__)
 require '../spec/test_module' if $test_env
 require 'helpers'
+require 'exceptions'
+require 'validation'
 
 class Field
   include TestModule if $test_env
-  attr_accessor :type, :label_text, :name, :help_text, :html_id, :errors, :pretty_print, :required
+  include FieldValidation
+  attr_accessor :type, :label_text, :name, :help_text, :html_id, :errors, :pretty_print, :required, :valid
 
   def initialize(label_text=nil, attributes=nil, help_text=nil, required='false')
     @label_text, @attributes, @help_text, @required = label_text, attributes, help_text, required
     @type = self.class.to_s.gsub(/Field$/, '').downcase
+    @valid = true
   end
 
   def html_id
