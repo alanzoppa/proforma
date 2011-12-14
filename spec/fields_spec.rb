@@ -206,7 +206,7 @@ describe "A Form containing ChoiceFields" do
   end
 
   it "should generate a list of html options" do
-    @surname_field._html_options.should == "\n  <option value='capulet'>Capulet</option>\n  <option value='montague'>Montague</option>"
+    @surname_field._html_options.should == "\n  <option value='Capulet'>Capulet</option>\n  <option value='Montague'>Montague</option>"
   end
 
   it "should generate a complete select field" do

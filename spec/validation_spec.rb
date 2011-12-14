@@ -66,13 +66,31 @@ end
 describe "A Form with a required ChoiceField" do
   before do
     class RequiredChoiceForm < Form
-      @@surname = ChoiceField.new("Choose a family", ['Capulet', 'Montague'], attributes=nil, help_text=nil, required=false)
+      @@surname = ChoiceField.new("Choose a family", ['Capulet', 'Montague'], attributes=nil, help_text=nil, required=true)
     end
+
   end
 
   it "should complain if the type for validation is incorrect" do
     lambda { RequiredChoiceForm.new({:surname => 1234567890}) }.should raise_error ArgumentError
     lambda { RequiredChoiceForm.new({:surname => ["array", :of, "whatever"]}) }.should raise_error ArgumentError
+  end
+
+  it "should complain if no data is entered" do
+    @invalid_required_choice_form = RequiredChoiceForm.new({:surname => "something else"})
+    @invalid_required_choice_form.is_valid?.should be_false
+  end
+
+  it "should be valid if an available family name is chosen" do
+    @valid_required_choice_form = RequiredChoiceForm.new({:surname => 'Capulet'})
+    @another_valid_required_choice_form = RequiredChoiceForm.new({:surname => 'Montague'})
+    @valid_required_choice_form.is_valid?.should be_true
+    @another_valid_required_choice_form.is_valid?.should be_true
+  end
+
+  it "should complain if something else is input somehow" do
+    @invalid_required_choice_form = RequiredChoiceForm.new({:surname => 'anything else'})
+    @invalid_required_choice_form.is_valid?.should be_false
   end
 
 end

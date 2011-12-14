@@ -55,7 +55,7 @@ class CheckboxField < Field
   end
 
   def complain_about_invalid_data(datum)
-    raise ArgumentError.new("") unless [TrueClass, FalseClass].include?(datum.class)
+    raise ArgumentError.new("#{self.class} validation data must be a boolean") unless [TrueClass, FalseClass].include?(datum.class)
   end
 
   def filled?(datum)
@@ -72,9 +72,13 @@ class ChoiceField < Field
     @valid = true
   end
 
+  def filled?(datum)
+    @values.include?(datum)
+  end
+
   def _html_options
     html_options = @values.map { |v|
-      tag = wrap_tag(v, :option, {:value => symbolize(v)})
+      tag = wrap_tag(v, :option, {:value => v})
       tag = tag.template("\n  %s") if @pretty_print
     }.join
   end

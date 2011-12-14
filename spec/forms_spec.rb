@@ -115,9 +115,9 @@ describe "A more complicated form with multiple fields" do
       "<div class='more_complicated'>",
       "  <label for='id_family'>Choose a family</label>",
       "  <select id='id_family' name='family'>",
-      "    <option value='capulet'>Capulet</option>",
-      "    <option value='montague'>Montague</option>",
-      "    <option value='other'>Other</option>",
+      "    <option value='Capulet'>Capulet</option>",
+      "    <option value='Montague'>Montague</option>",
+      "    <option value='Other'>Other</option>",
       "  </select>",
       "</div>"].join("\n")
   end
