@@ -86,7 +86,7 @@ describe "A more complicated form with multiple fields" do
   end
 
   it "should generate four <divs> with the class 'more_complicated'" do
-    print "\n" + @more_complicated_form.to_html
+    #print "\n" + @more_complicated_form.to_html
     (0..3).each do |i|
       @more_complicated_form._noko_nth(:div, i)[:class].should == "more_complicated"
     end

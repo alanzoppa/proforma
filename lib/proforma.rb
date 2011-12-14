@@ -1,15 +1,18 @@
 $: << File.dirname(__FILE__)
 
 require 'fields'
+require 'validation'
 
 class Form
   include TestModule if $test_env
+  include Validation
   attr_accessor :fields
 
-  def initialize 
+  def initialize(data=nil)
     _define_defaults
     _initialize_fields
     _prepare_getters
+    _error_if_required_fields_missing
   end
 
   def redefine_defaults
