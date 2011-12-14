@@ -114,9 +114,15 @@ end
 class RadioChoiceField < Field
   attr_accessor :fields
 
-  def initialize(label_text, values, attributes = Array.new)
-    @label_text, @values, @attributes = label_text, values, attributes
+  def initialize(label_text, values, attributes = Hash.new, help_text=nil, required=false)
+    @label_text, @values, @attributes, @help_text, @required = label_text, values, attributes, help_text, required
     @fields = values.map { |value| RadioField.new(value) }
+    @type = self.class.to_s.gsub(/Field$/, '').downcase
+    @valid = true
+  end
+
+  def filled?(datum)
+    @values.include?(datum)
   end
 
   def html_id
