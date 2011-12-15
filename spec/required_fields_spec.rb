@@ -7,13 +7,13 @@ require '../lib/proforma'
 describe "A Form with required fields" do
   before do
     class SomeRequiredFieldsForm < Form
-      @@text_field = TextField.new(label_text="Herp some derps", attributes=nil, help_text=nil, required=true)
-      @@stupid = CheckboxField.new("Check here if stupid", attributes=nil, help_text=nil, required=false)
+      @@text_field = TextField.new(label_text="Herp some derps", attributes=nil, {:required=>true})
+      @@stupid = CheckboxField.new("Check here if stupid", attributes=nil, {:required=>false})
     end
 
     class CheckboxTextFieldForm < Form
-      @@text_field = TextField.new(label_text="Herp some derps", attributes=nil, help_text=nil, required=true)
-      @@stupid = CheckboxField.new("Check here if stupid", attributes=nil, help_text=nil, required=true)
+      @@text_field = TextField.new(label_text="Herp some derps", attributes=nil, {:required=>true})
+      @@stupid = CheckboxField.new("Check here if stupid", attributes=nil, {:required=>true})
     end
 
     @invalid_form = SomeRequiredFieldsForm.new({:text_field => ""})
@@ -66,7 +66,7 @@ end
 describe "A Form with a required ChoiceField" do
   before do
     class RequiredChoiceForm < Form
-      @@surname = ChoiceField.new("Choose a family", ['Capulet', 'Montague'], attributes=nil, help_text=nil, required=true)
+      @@surname = ChoiceField.new("Choose a family", ['Capulet', 'Montague'], attributes=nil, {:required=>true})
     end
 
   end
@@ -99,7 +99,7 @@ end
 describe "A Form with a required RadioChoiceField" do
   before do
     class RequiredRadioChoiceForm < Form
-      @@surname = RadioChoiceField.new("Choose a family", ['Capulet', 'Montague'], attributes=nil, help_text=nil, required=true)
+      @@surname = RadioChoiceField.new("Choose a family", ['Capulet', 'Montague'], attributes=nil, {:required=>true})
     end
   end
 
