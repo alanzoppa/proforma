@@ -69,13 +69,9 @@ class CheckboxField < Field
 end
 
 class ChoiceField < Field
-  def initialize(label_text, values, attributes = Hash.new, opts={})
-    opts ||= {}
-    opts = ({ :help_text => nil, :required => false }).merge(opts)
-    @help_text, @required = opts[:help_text], opts[:required]
-    @type = self.class.to_s.gsub(/Field$/, '').downcase
-    @valid = true
-    @label_text, @values, @attributes = label_text, values, attributes
+  def initialize(label_text=nil, values=nil, attributes=nil, opts={})
+    super(label_text, attributes, opts)
+    @values = values
   end
 
   def filled?(datum)
@@ -99,12 +95,10 @@ class ChoiceField < Field
 end
 
 class RadioField < Field
-  def initialize(value, attributes = Hash.new, options={})
-    opts ||= {}
-    opts = ({ :help_text => nil, :required => false }).merge(opts)
-    @value, @attributes, @type = value, attributes, :radio
+  def initialize(value=nil, attributes = Hash.new, opts={})
+    super(label_text=nil, attributes=attributes, opts=opts)
+    @label_text, @value = value, value
     @attributes[:value] = @value.downcase
-    @label_text = @value
   end
 
   def html_id
@@ -121,13 +115,9 @@ end
 class RadioChoiceField < Field
   attr_accessor :fields
 
-  def initialize(label_text, values, attributes = Hash.new, opts={})
-    opts ||= {}
-    opts = ({ :help_text => nil, :required => false }).merge(opts)
-    @help_text, @required = opts[:help_text], opts[:required]
-    @type = self.class.to_s.gsub(/Field$/, '').downcase
-    @valid = true
-    @label_text, @values, @attributes = label_text, values, attributes
+  def initialize(label_text=nil, values=nil, attributes=nil, opts={})
+    super(label_text, attributes, opts)
+    @values = values
     @fields = values.map { |value| RadioField.new(value) }
   end
 
