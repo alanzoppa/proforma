@@ -95,9 +95,9 @@ class Form
     output = String.new
     @fields.each do |field|
       if @pretty_print
-        field_contents = field.to_labeled_html.indent.template("\n%s\n")
+        field_contents = "\n#{indent(field.to_labeled_html)}\n"
         output += wrap_tag(field_contents, tag, attributes)
-        output = output.template("%s\n") unless field == @fields.last and @fields.length > 1
+        output = "#{output}\n" unless field == @fields.last and @fields.length > 1
       else
         output += wrap_tag(field.to_labeled_html, tag, attributes)
       end

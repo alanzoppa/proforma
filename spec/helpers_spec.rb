@@ -23,30 +23,18 @@ describe "the wrap_tag method" do
 end
 
 
-describe "the monkey patch indent method" do
+describe "the indent method" do
   before do
     @string = "Blinky,\nPinky,\nInky,\nClyde"
   end
 
 
   it "should indent two lines by default" do
-    @string.indent.should == "  Blinky,\n  Pinky,\n  Inky,\n  Clyde"
+    indent(@string).should == "  Blinky,\n  Pinky,\n  Inky,\n  Clyde"
   end
 
   it "should indent by n lines" do
-    @string.indent(4).should == "    Blinky,\n    Pinky,\n    Inky,\n    Clyde"
+    indent(@string,4).should == "    Blinky,\n    Pinky,\n    Inky,\n    Clyde"
   end
 
-end
-
-describe "the template monkey patch" do
-  before do
-    @byron = "I would to heaven that I were so much clay\nAs I am bone, blood, marrow, passion, feeling"
-  end
-
-  it "should interpolate an arbitrary string" do
-    @byron.template("\n%s\n").should == "\nI would to heaven that I were so much clay\nAs I am bone, blood, marrow, passion, feeling\n"
-    @byron.template("%s\n").should == "I would to heaven that I were so much clay\nAs I am bone, blood, marrow, passion, feeling\n"
-    @byron.template("\n%s").should == "\nI would to heaven that I were so much clay\nAs I am bone, blood, marrow, passion, feeling"
-  end
 end
