@@ -48,8 +48,7 @@ module FieldValidation
   end
 
   def regex_matching_or_unset?(field_data)
-    #puts @opts[:regex]
-    #puts @opts[:regex].nil? || !field_data.match(@opts[:regex]).nil?
+    # No need to invalidate if there is no regex set
     return @opts[:regex].nil? || !field_data.match(@opts[:regex]).nil?
   end
 end
