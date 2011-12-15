@@ -10,9 +10,7 @@ class Form
     _define_defaults
     _initialize_fields
     _prepare_getters
-    unless data.nil?
-      _validate_required_fields(data)
-    end
+    _validate_required_fields(data) unless data.nil?
   end
 
   def redefine_defaults
@@ -28,11 +26,11 @@ class Form
 
   def _initialize_fields
     @fields = Array.new
-    self.class.class_variables.each { |var|
+    self.class.class_variables.each do |var|
       field = self.class.send("class_variable_get", var).dup # the field itself
       field_name = var.to_s.gsub(/^@@/, '') # the field's name with the leading "@@" stripped
       _attach_field_attributes(field, field_name) if field.class.ancestors.include? Field
-    }
+    end
   end
 
   def _attach_field_attributes(field, field_name)

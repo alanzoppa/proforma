@@ -21,7 +21,7 @@ describe "A Form with required fields" do
   end
  
   it "should complain if you intialize with something other than a Hash or nil" do
-    lambda { SomeRequiredFieldsForm.new("anything else") }.should raise_error(RuntimeError, "You can only validate a Hash")
+    lambda { SomeRequiredFieldsForm.new("anything else") }.should raise_error(ArgumentError, "You can only validate a Hash")
   end
 
   it "should be valid if the text field is filled" do

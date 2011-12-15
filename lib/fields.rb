@@ -15,6 +15,7 @@ class Field
     @help_text, @required = opts[:help_text], opts[:required]
     @type = self.class.to_s.gsub(/Field$/, '').downcase
     @valid = true
+    @errors = Hash.new
     @label_text, @attributes, = label_text, attributes
   end
 
