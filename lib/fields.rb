@@ -10,13 +10,17 @@ class Field
   attr_accessor :type, :label_text, :name, :help_text, :html_id, :errors, :pretty_print, :required, :valid
 
   def initialize(label_text=nil, attributes=nil, opts={})
+    @label_text, @attributes, = label_text, attributes
     opts ||= {}
-    opts = ({ :help_text => nil, :required => false }).merge(opts)
-    @help_text, @required = opts[:help_text], opts[:required]
+    @opts = ({
+      :help_text => nil,
+      :required => false,
+      :required_error => "'#{@label_text}' is required."
+    }).merge(opts)
+    @help_text, @required = @opts[:help_text], @opts[:required]
     @type = self.class.to_s.gsub(/Field$/, '').downcase
     @valid = true
     @errors = Array.new
-    @label_text, @attributes, = label_text, attributes
   end
 
   def html_id
@@ -50,7 +54,7 @@ class Field
 
   def invalidate!
     @valid = false
-    @errors << "#{@label_text} is required"
+    @errors << @opts[:required_error]
   end
 
 end

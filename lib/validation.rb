@@ -16,6 +16,13 @@ module Validation
     # If the valid bit is true for all fields, the form is valid
     return @fields.all? {|field| field.valid? == true}
   end
+
+  def _collect_errors
+    @errors = Hash.new
+    @fields.each do |f|
+      @errors[f.name] = f.errors unless f.errors.empty?
+    end
+  end
 end
 
 

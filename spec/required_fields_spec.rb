@@ -55,7 +55,7 @@ describe "A Form with required fields" do
   it "should have a sensible error message if a required box is unchecked" do
     @missing_checkbox_form = CheckboxTextFieldForm.new({:text_field => "Any string", :stupid => false})
     f = @missing_checkbox_form.get_instance(:stupid)
-    f.errors.should include "#{f.label_text} is required"
+    f.errors.should include "'#{f.label_text}' is required."
   end
 
   it "should complain if data is invalid for a given field" do
@@ -121,7 +121,7 @@ describe "A Form with a required RadioChoiceField" do
 
   it "should have a sensible error message if no data is entered" do
     field = @nothing_chosen_radio_choice_form.get_instance(:surname)
-    field.errors.should == ["#{field.label_text} is required",]
+    field.errors.should include "'#{field.label_text}' is required."
   end
 
   it "should be valid if an available family name is chosen" do
@@ -134,6 +134,36 @@ describe "A Form with a required RadioChoiceField" do
   it "should complain if something else is input somehow" do
     @invalid_required_radio_choice_form = RequiredChoiceForm.new({:surname => 'anything else'})
     @invalid_required_radio_choice_form.is_valid?.should be_false
+  end
+
+end
+
+
+describe "Required field error messages" do
+  before do
+    class ErrorMessagesForm < Form
+      @@text_field = TextField.new(label_text="Herp some derps", attributes=nil, {:required=>true})
+      @@stupid = CheckboxField.new("Check here if stupid", attributes=nil, {:required=>true, :required_error => "Please confirm that you are stupid."})
+      @@surname = ChoiceField.new("Choose a family", ['Capulet', 'Montague'], attributes=nil, {:required=>true})
+    end
+
+    @just_text = ErrorMessagesForm.new({:text_field => "Arbitrary string"})
+  end
+
+  it "should record a custom error for the missing :stupid field" do
+    stupid_field = @just_text.get_instance(:stupid)
+    stupid_field.errors.should include "Please confirm that you are stupid."
+  end
+
+  it "should record a generic error for the missing :surname field" do
+    surname_field = @just_text.get_instance(:surname)
+    surname_field.errors.should include "'#{surname_field.label_text}' is required."
+  end
+
+  it "should bubble error messages up to the form" do
+    @just_text.errors[:surname].should include "'Choose a family' is required."
+    @just_text.errors[:stupid].should include "Please confirm that you are stupid."
+    @just_text.errors.length.should == 2
   end
 
 end

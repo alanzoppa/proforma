@@ -4,13 +4,16 @@ require 'exceptions'
 class Form
   include TestModule if $test_env
   include Validation
-  attr_accessor :fields
+  attr_accessor :fields, :errors
 
   def initialize(data=nil)
     _define_defaults
     _initialize_fields
     _prepare_getters
-    _validate_required_fields(data) unless data.nil?
+    unless data.nil?
+      _validate_required_fields(data)
+      _collect_errors
+    end
   end
 
   def redefine_defaults
