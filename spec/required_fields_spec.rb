@@ -48,8 +48,14 @@ describe "A Form with required fields" do
   end
 
   it "should complain if a required box is unchecked" do
-    @valid_checkbox_form = CheckboxTextFieldForm.new({:text_field => "Any string", :stupid => false})
-    @valid_checkbox_form.is_valid?.should be_false
+    @missing_checkbox_form = CheckboxTextFieldForm.new({:text_field => "Any string", :stupid => false})
+    @missing_checkbox_form.is_valid?.should be_false
+  end
+
+  it "should have a sensible error message if a required box is unchecked" do
+    @missing_checkbox_form = CheckboxTextFieldForm.new({:text_field => "Any string", :stupid => false})
+    f = @missing_checkbox_form.get_instance(:stupid)
+    f.errors.should include "#{f.label_text} is required"
   end
 
   it "should complain if data is invalid for a given field" do
@@ -68,7 +74,6 @@ describe "A Form with a required ChoiceField" do
     class RequiredChoiceForm < Form
       @@surname = ChoiceField.new("Choose a family", ['Capulet', 'Montague'], attributes=nil, {:required=>true})
     end
-
   end
 
   it "should complain if the type for validation is incorrect" do
@@ -101,6 +106,8 @@ describe "A Form with a required RadioChoiceField" do
     class RequiredRadioChoiceForm < Form
       @@surname = RadioChoiceField.new("Choose a family", ['Capulet', 'Montague'], attributes=nil, {:required=>true})
     end
+
+    @nothing_chosen_radio_choice_form = RequiredRadioChoiceForm.new({:surname => ""})
   end
 
   it "should complain if the type for validation is incorrect" do
@@ -109,8 +116,12 @@ describe "A Form with a required RadioChoiceField" do
   end
 
   it "should complain if no data is entered" do
-    @invalid_required_radio_choice_form = RequiredRadioChoiceForm.new({:surname => "something else"})
-    @invalid_required_radio_choice_form.is_valid?.should be_false
+    @nothing_chosen_radio_choice_form.is_valid?.should be_false
+  end
+
+  it "should have a sensible error message if no data is entered" do
+    field = @nothing_chosen_radio_choice_form.get_instance(:surname)
+    field.errors.should == ["#{field.label_text} is required",]
   end
 
   it "should be valid if an available family name is chosen" do

@@ -8,7 +8,7 @@ module Validation
     @fields.each do |field|
       field_data = @raw_data[field.name.to_s]
       field.complain_about_invalid_data(field_data) unless field_data.nil?
-      field.valid = false if field.required? && !field.filled?(field_data)
+      field.invalidate! if field.required? && !field.filled?(field_data)
     end
   end
 

@@ -15,7 +15,7 @@ class Field
     @help_text, @required = opts[:help_text], opts[:required]
     @type = self.class.to_s.gsub(/Field$/, '').downcase
     @valid = true
-    @errors = Hash.new
+    @errors = Array.new
     @label_text, @attributes, = label_text, attributes
   end
 
@@ -46,6 +46,11 @@ class Field
   def filled?(datum)
     #If this returns true, the field is filled
     !datum.nil? && !datum.empty?
+  end
+
+  def invalidate!
+    @valid = false
+    @errors << "#{@label_text} is required"
   end
 
 end
@@ -145,4 +150,5 @@ class RadioChoiceField < Field
   def to_html
     ( @pretty_print ? "\n" : "" ) + wrap_tag(fieldset_legend + self._html_options, :fieldset, {:id => html_id})
   end
+
 end
