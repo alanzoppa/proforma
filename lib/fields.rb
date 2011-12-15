@@ -11,12 +11,13 @@ class Field
 
   def initialize(label_text=nil, attributes=nil, opts={})
     @label_text, @attributes, = label_text, attributes
-    opts ||= {}
     @opts = ({
       :help_text => nil,
       :required => false,
-      :required_error => "'#{@label_text}' is required."
+      :required_error => "'#{@label_text}' is required.",
+      :regex_error => "'#{@label_text}' contains invalid input"
     }).merge(opts)
+    #puts "foobar".match(@opts[:regex]) unless @opts[:regex].nil?
     @help_text, @required = @opts[:help_text], @opts[:required]
     @type = self.class.to_s.gsub(/Field$/, '').downcase
     @valid = true

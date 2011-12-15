@@ -12,7 +12,8 @@ class Form
     _prepare_getters
     unless data.nil?
       _validate_required_fields(data)
-      _collect_errors
+      _run_regex_validations(data)
+      _collect_errors #Should be last
     end
   end
 

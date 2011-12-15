@@ -23,6 +23,13 @@ module Validation
       @errors[f.name] = f.errors unless f.errors.empty?
     end
   end
+
+  def _run_regex_validations(data)
+    @fields.each do |field|
+      field_data = @raw_data[field.name.to_s]
+      field.regex_invalidate! unless field.regex_matching_or_unset?(field_data)
+    end
+  end
 end
 
 
@@ -33,5 +40,16 @@ module FieldValidation
 
   def valid?
     self.valid
+  end
+
+  def regex_invalidate!
+    @valid = false
+    @errors << @opts[:regex_error]
+  end
+
+  def regex_matching_or_unset?(field_data)
+    #puts @opts[:regex]
+    #puts @opts[:regex].nil? || !field_data.match(@opts[:regex]).nil?
+    return @opts[:regex].nil? || !field_data.match(@opts[:regex]).nil?
   end
 end
