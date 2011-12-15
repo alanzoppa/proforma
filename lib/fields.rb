@@ -62,9 +62,7 @@ class CheckboxField < Field
   end
 
   def filled?(datum)
-    return false if datum.nil?
-    return false if datum.class == FalseClass
-    return true if datum.class == TrueClass
+    datum.class == TrueClass
   end
 end
 
@@ -86,10 +84,9 @@ class ChoiceField < Field
   end
 
   def to_html
-    option_fields = _html_options
-    option_fields = option_fields + "\n" if @pretty_print
+    option_fields = _html_options + "\n" if @pretty_print
     output = wrap_tag(option_fields, :select, {:id => html_id, :name => @name})
-    output = "\n" + indent(output, 0) if @pretty_print
+    output = "\n" + output if @pretty_print
     return output
   end
 end

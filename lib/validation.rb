@@ -6,7 +6,6 @@ module Validation
 
     @fields.each do |field|
       field_data = @raw_data[field.name.to_s]
-      #puts field_data.class if field.class == CheckboxField
       field.complain_about_invalid_data(field_data) unless field_data.nil?
       field.valid = false if field.required? && !field.filled?(field_data)
     end

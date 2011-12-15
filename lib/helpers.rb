@@ -24,8 +24,6 @@ end
 
 def dup_hash_with_string_keys hash
   new_hash = Hash.new
-  hash.keys.each do |k|
-    new_hash[k.to_s] = hash[k]
-  end
+  hash.keys.each {|k| new_hash[k.to_s] = hash[k] }
   return new_hash
 end

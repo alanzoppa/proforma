@@ -28,22 +28,14 @@ class Form
 
   def _initialize_fields
     @fields = Array.new
-    self.class.class_variables.each { |v|
-      # the field itself
-      # the field's name cast as string with the leading "@@" stripped
-      #
-      field = self.class.send("class_variable_get", v).dup
-      field_name = v.to_s.gsub(/^@@/, '')
-      __flatten_fields(field, field_name)
+    self.class.class_variables.each { |var|
+      field = self.class.send("class_variable_get", var).dup # the field itself
+      field_name = var.to_s.gsub(/^@@/, '') # the field's name with the leading "@@" stripped
+      _attach_field_attributes(field, field_name) if field.class.ancestors.include? Field
     }
   end
 
-  def __flatten_fields(field, field_name)
-    #Ignore class vars which are not subclasses of Field
-    ___attach_field_attributes(field, field_name) if field.class.ancestors.include? Field
-  end
-
-  def ___attach_field_attributes(field, field_name)
+  def _attach_field_attributes(field, field_name)
     field.name = field_name.to_sym
     field.attach_names!(field_name) if field.respond_to?(:attach_names!)
     field.pretty_print = @pretty_print
