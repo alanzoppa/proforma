@@ -6,7 +6,7 @@ require '../lib/proforma'
 
 describe "A Form with required fields" do
   before do
-    class TextFieldForm < Form
+    class SomeRequiredFieldsForm < Form
       @@text_field = TextField.new(label_text="Herp some derps", attributes=nil, help_text=nil, required=true)
       @@stupid = CheckboxField.new("Check here if stupid", attributes=nil, help_text=nil, required=false)
     end
@@ -16,12 +16,12 @@ describe "A Form with required fields" do
       @@stupid = CheckboxField.new("Check here if stupid", attributes=nil, help_text=nil, required=true)
     end
 
-    @invalid_form = TextFieldForm.new({:text_field => ""})
-    @valid_form = TextFieldForm.new({:text_field => "Any string"})
+    @invalid_form = SomeRequiredFieldsForm.new({:text_field => ""})
+    @valid_form = SomeRequiredFieldsForm.new({:text_field => "Any string"})
   end
  
   it "should complain if you intialize with something other than a Hash or nil" do
-    lambda { TextFieldForm.new("anything else") }.should raise_error(RuntimeError, "You can only validate a Hash")
+    lambda { SomeRequiredFieldsForm.new("anything else") }.should raise_error(RuntimeError, "You can only validate a Hash")
   end
 
   it "should be valid if the text field is filled" do
@@ -29,7 +29,7 @@ describe "A Form with required fields" do
   end
 
   it "should be valid if all required fields are the required type" do
-    @valid_textfield_form = TextFieldForm.new({:text_field => "Any string", :stupid => false})
+    @valid_textfield_form = SomeRequiredFieldsForm.new({:text_field => "Any string", :stupid => false})
     @valid_textfield_form.is_valid?.should be_true
   end
 
@@ -43,7 +43,7 @@ describe "A Form with required fields" do
   end
 
   it "should be indifferent to strings or symbols as keys" do
-    @also_a_valid_form = TextFieldForm.new({'text_field' => "Any string"})
+    @also_a_valid_form = SomeRequiredFieldsForm.new({'text_field' => "Any string"})
     @also_a_valid_form.is_valid?.should be_true
   end
 
@@ -58,7 +58,7 @@ describe "A Form with required fields" do
   end
 
   it "should not complain about nil data on a non-required field" do
-    lambda { TextFieldForm.new({:text_field => 'any string', :stupid => nil}) }.should_not raise_error(ArgumentError)
+    lambda { SomeRequiredFieldsForm.new({:text_field => 'any string', :stupid => nil}) }.should_not raise_error(ArgumentError)
   end
 
 end
