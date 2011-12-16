@@ -15,7 +15,7 @@ module Validation
     end
   end
 
-  def is_valid?
+  def valid?
     # If the valid bit is true for all fields, the form is valid
     return @fields.all? {|field| field.valid? == true}
   end
@@ -44,7 +44,7 @@ module Validation
   end
 
   def cleaned_data
-    raise InvalidFormError.new("Cleaned data is not available on an invalid form.") unless self.is_valid?
+    raise InvalidFormError.new("Cleaned data is not available on an invalid form.") unless self.valid?
     output_hash = Hash.new
     @_cleaned_data.each { |k,v| output_hash[k.to_sym] = v } #back to symbol keys
     return output_hash

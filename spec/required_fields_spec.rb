@@ -25,31 +25,31 @@ describe "A Form with required fields" do
   end
 
   it "should be valid if the text field is filled" do
-    @valid_form.is_valid?.should be_true
+    @valid_form.valid?.should be_true
   end
 
   it "should be valid if all required fields are the required type" do
     @valid_textfield_form = SomeRequiredFieldsForm.new({:text_field => "Any string", :stupid => false})
-    @valid_textfield_form.is_valid?.should be_true
+    @valid_textfield_form.valid?.should be_true
   end
 
   it "should be valid if all required fields are filled" do
     @valid_checkbox_form = CheckboxTextFieldForm.new({:text_field => "Any string", :stupid => true})
-    @valid_checkbox_form.is_valid?.should be_true
+    @valid_checkbox_form.valid?.should be_true
   end
 
   it "should complain if the text field is not filled" do
-    @invalid_form.is_valid?.should be_false
+    @invalid_form.valid?.should be_false
   end
 
   it "should be indifferent to strings or symbols as keys" do
     @also_a_valid_form = SomeRequiredFieldsForm.new({'text_field' => "Any string"})
-    @also_a_valid_form.is_valid?.should be_true
+    @also_a_valid_form.valid?.should be_true
   end
 
   it "should complain if a required box is unchecked" do
     @missing_checkbox_form = CheckboxTextFieldForm.new({:text_field => "Any string", :stupid => false})
-    @missing_checkbox_form.is_valid?.should be_false
+    @missing_checkbox_form.valid?.should be_false
   end
 
   it "should have a sensible error message if a required box is unchecked" do
@@ -83,19 +83,19 @@ describe "A Form with a required ChoiceField" do
 
   it "should complain if no data is entered" do
     @invalid_required_choice_form = RequiredChoiceForm.new({:surname => "something else"})
-    @invalid_required_choice_form.is_valid?.should be_false
+    @invalid_required_choice_form.valid?.should be_false
   end
 
   it "should be valid if an available family name is chosen" do
     @valid_required_choice_form = RequiredChoiceForm.new({:surname => 'Capulet'})
     @another_valid_required_choice_form = RequiredChoiceForm.new({:surname => 'Montague'})
-    @valid_required_choice_form.is_valid?.should be_true
-    @another_valid_required_choice_form.is_valid?.should be_true
+    @valid_required_choice_form.valid?.should be_true
+    @another_valid_required_choice_form.valid?.should be_true
   end
 
   it "should complain if something else is input somehow" do
     @invalid_required_choice_form = RequiredChoiceForm.new({:surname => 'anything else'})
-    @invalid_required_choice_form.is_valid?.should be_false
+    @invalid_required_choice_form.valid?.should be_false
   end
 
 end
@@ -116,7 +116,7 @@ describe "A Form with a required RadioChoiceField" do
   end
 
   it "should complain if no data is entered" do
-    @nothing_chosen_radio_choice_form.is_valid?.should be_false
+    @nothing_chosen_radio_choice_form.valid?.should be_false
   end
 
   it "should have a sensible error message if no data is entered" do
@@ -127,13 +127,13 @@ describe "A Form with a required RadioChoiceField" do
   it "should be valid if an available family name is chosen" do
     @valid_required_radio_choice_form = RequiredChoiceForm.new({:surname => 'Capulet'})
     @another_valid_required_radio_choice_form = RequiredChoiceForm.new({:surname => 'Montague'})
-    @valid_required_radio_choice_form.is_valid?.should be_true
-    @another_valid_required_radio_choice_form.is_valid?.should be_true
+    @valid_required_radio_choice_form.valid?.should be_true
+    @another_valid_required_radio_choice_form.valid?.should be_true
   end
 
   it "should complain if something else is input somehow" do
     @invalid_required_radio_choice_form = RequiredChoiceForm.new({:surname => 'anything else'})
-    @invalid_required_radio_choice_form.is_valid?.should be_false
+    @invalid_required_radio_choice_form.valid?.should be_false
   end
 
 end
