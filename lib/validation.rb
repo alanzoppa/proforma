@@ -30,6 +30,17 @@ module Validation
       field.regex_invalidate! unless field.regex_matching_or_unset?(field_data)
     end
   end
+
+  def _run_custom_validations(data)
+    @fields.each do |field|
+      field_data = @raw_data[field.name.to_s]
+      begin
+        self.send("cleaned_#{field.name}", field_data) if self.respond_to?("cleaned_#{field.name}")
+      rescue FieldValidationError => error_message
+        field.custom_invalidate!(error_message.to_s)
+      end
+    end
+  end
 end
 
 
@@ -45,6 +56,11 @@ module FieldValidation
   def regex_invalidate!
     @valid = false
     @errors << @opts[:regex_error]
+  end
+
+  def custom_invalidate!(error_message)
+    @valid = false
+    @errors << error_message
   end
 
   def regex_matching_or_unset?(field_data)

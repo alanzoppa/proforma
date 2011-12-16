@@ -13,6 +13,7 @@ class Form
     unless data.nil?
       _validate_required_fields(data)
       _run_regex_validations(data)
+      _run_custom_validations(data)
       _collect_errors #Should be last
     end
   end
