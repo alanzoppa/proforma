@@ -47,5 +47,10 @@ describe "A from with fields who have interdependent validations" do
     form.errors.empty?.should be_true
   end
 
+  it "should preserve the coerced output of cleaned_whatever" do
+    form = MultipleValidationTextFieldForm.new({:first_number => "3", :second_number => "7"})
+    form.cleaned_data[:first_number].class.should == Fixnum
+    form.cleaned_data[:second_number].class.should == Fixnum
+  end
 
 end
