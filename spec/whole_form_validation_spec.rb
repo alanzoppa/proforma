@@ -4,7 +4,7 @@ require 'test_module'
 require '../lib/proforma'
 
 
-describe "A from with fields who have interdependent validations" do
+describe "A form with fields who have interdependent validations" do
   before :each do
     class MultipleValidationTextFieldForm < Form
       @@first_number = TextField.new("First Number")
@@ -51,6 +51,21 @@ describe "A from with fields who have interdependent validations" do
     form = MultipleValidationTextFieldForm.new({:first_number => "3", :second_number => "7"})
     form.cleaned_data[:first_number].class.should == Fixnum
     form.cleaned_data[:second_number].class.should == Fixnum
+  end
+
+end
+
+
+
+describe "A form that shouldn't exist" do
+  before do
+    class FatallyFlawedForm < Form
+      @@form = TextField.new("First Number")
+    end
+  end
+
+  it "should raise an error if someone calls a field 'form'" do
+    lambda { FatallyFlawedForm.new }.should raise_error(FormImplementationError, "Fields cannot be named 'form'")
   end
 
 end

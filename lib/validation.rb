@@ -27,7 +27,6 @@ module Validation
 
   def invalidate!(error_message)
     # This will make it difficult if you want to validate a field called 'form'
-    # TODO: Raise an error if someone tries
     @errors[:form] = error_message.to_s
     @valid = false
   end
@@ -64,6 +63,10 @@ module Validation
     output_hash = Hash.new
     @_cleaned_data.each { |k,v| output_hash[k.to_sym] = v } #back to symbol keys
     return output_hash
+  end
+
+  def _raise_usage_validations
+    raise FormImplementationError.new("Fields cannot be named 'form'") if @fields.any? {|field| field.name == :form}
   end
 end
 

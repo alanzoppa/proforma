@@ -10,6 +10,7 @@ class Form
     _define_defaults
     _initialize_fields
     _prepare_getters
+    _raise_usage_validations
     unless data.nil?
       raise ArgumentError.new("You can only validate a Hash") unless data.class == Hash
       @raw_data = dup_hash_with_string_keys(data).dup # Rails creates POST hashes with string keys
