@@ -11,6 +11,10 @@ class Form
     _initialize_fields
     _prepare_getters
     unless data.nil?
+      raise ArgumentError.new("You can only validate a Hash") unless data.class == Hash
+      @raw_data = dup_hash_with_string_keys(data).dup # Rails creates POST hashes with string keys
+      @_cleaned_data = @raw_data.dup
+      _run_default_validations(data)
       _validate_required_fields(data)
       _run_regex_validations(data)
       _run_custom_validations(data)

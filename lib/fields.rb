@@ -80,6 +80,7 @@ end
 class ChoiceField < Field
   def initialize(label_text=nil, values=nil, attributes=nil, opts={})
     super(label_text, attributes, opts)
+    @opts[:default_validation_message] ||= "Not an available choice"
     @values = values
   end
 
@@ -99,6 +100,13 @@ class ChoiceField < Field
     output = wrap_tag(option_fields, :select, {:id => html_id, :name => @name})
     output = "\n" + output if @pretty_print
     return output
+  end
+
+  def default_validation(datum)
+    unless @values.include?(datum) || datum.nil?
+      self.valid = false
+      @errors << @opts[:default_validation_message]
+    end
   end
 end
 
@@ -125,6 +133,7 @@ class RadioChoiceField < Field
 
   def initialize(label_text=nil, values=nil, attributes=nil, opts={})
     super(label_text, attributes, opts)
+    @opts[:default_validation_message] ||= "Not an available choice"
     @values = values
     @fields = values.map { |value| RadioField.new(value) }
   end
@@ -154,6 +163,13 @@ class RadioChoiceField < Field
 
   def to_html
     ( @pretty_print ? "\n" : "" ) + wrap_tag(fieldset_legend + self._html_options, :fieldset, {:id => html_id})
+  end
+
+  def default_validation(datum)
+    unless @values.include?(datum) || datum.nil?
+      self.valid = false
+      @errors << @opts[:default_validation_message]
+    end
   end
 
 end

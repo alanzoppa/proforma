@@ -1,9 +1,13 @@
 module Validation
 
-  def _validate_required_fields(data)
-    raise ArgumentError.new("You can only validate a Hash") unless data.class == Hash
-    @raw_data = dup_hash_with_string_keys(data) # Rails creates POST hashes with string keys
 
+  def _run_default_validations(data)
+    @fields.each do |field|
+      field.default_validation(data[field.name]) if field.respond_to?(:default_validation)
+    end
+  end
+
+  def _validate_required_fields(data)
     # Set the Field's valid bit to false if a required field doesn't pass its local definition of filled?
     @fields.each do |field|
       field_data = @raw_data[field.name.to_s]
@@ -19,15 +23,13 @@ module Validation
 
   def _collect_errors
     @errors = Hash.new
-    @fields.each do |f|
-      @errors[f.name] = f.errors unless f.errors.empty?
-    end
+    @fields.each { |f| @errors[f.name] = f.errors unless f.errors.empty?  }
   end
 
   def _run_regex_validations(data)
     @fields.each do |field|
       field_data = @raw_data[field.name.to_s]
-      field.regex_invalidate! unless field.regex_matching_or_unset?(field_data)
+      field.regex_invalidate!(field.name.to_s) unless field.regex_matching_or_unset?(field_data)
     end
   end
 
@@ -37,9 +39,16 @@ module Validation
       begin
         self.send("cleaned_#{field.name}", field_data) if self.respond_to?("cleaned_#{field.name}")
       rescue FieldValidationError => error_message
-        field.custom_invalidate!(error_message.to_s)
+        field.custom_invalidate!(error_message.to_s, field.name.to_s)
       end
     end
+  end
+
+  def cleaned_data
+    raise InvalidFormError.new("Cleaned data is not available on an invalid form.") unless self.is_valid?
+    output_hash = Hash.new
+    @_cleaned_data.each { |k,v| output_hash[k.to_sym] = v } #back to symbol keys
+    return output_hash
   end
 end
 
@@ -53,14 +62,16 @@ module FieldValidation
     self.valid
   end
 
-  def regex_invalidate!
+  def regex_invalidate!(field_name)
     @valid = false
     @errors << @opts[:regex_error]
+    @_cleaned_data.delete(field_name) if @cleaned_data && !@_cleaned_data[field_name].nil?
   end
 
-  def custom_invalidate!(error_message)
+  def custom_invalidate!(error_message, field_name)
     @valid = false
     @errors << error_message
+    @_cleaned_data.delete(field_name) if @cleaned_data && !@_cleaned_data[field_name].nil?
   end
 
   def regex_matching_or_unset?(field_data)
