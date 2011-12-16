@@ -15,13 +15,29 @@ module Validation
     end
   end
 
+  def _run_whole_form_validations(data)
+    @errors = Hash.new
+    self.valid = true #default
+    begin
+      self.cleaned_form(data) if self.respond_to?(:cleaned_form)
+    rescue FormValidationError => error_message
+      self.invalidate!(error_message)
+    end
+  end
+
+  def invalidate!(error_message)
+    # This will make it difficult if you want to validate a field called 'form'
+    # TODO: Raise an error if someone tries
+    @errors[:form] = error_message.to_s
+    @valid = false
+  end
+
   def valid?
     # If the valid bit is true for all fields, the form is valid
-    return @fields.all? {|field| field.valid? == true}
+    return @fields.all? {|field| field.valid? == true} && self.valid
   end
 
   def _collect_errors
-    @errors = Hash.new
     @fields.each { |f| @errors[f.name] = f.errors unless f.errors.empty?  }
   end
 
@@ -64,13 +80,13 @@ module FieldValidation
   def regex_invalidate!(field_name)
     @valid = false
     @errors << @opts[:regex_error]
-    @_cleaned_data.delete(field_name) if @cleaned_data && !@_cleaned_data[field_name].nil?
+    @_cleaned_data.delete(field_name) if @_cleaned_data && !@_cleaned_data[field_name].nil?
   end
 
   def custom_invalidate!(error_message, field_name)
     @valid = false
     @errors << error_message
-    @_cleaned_data.delete(field_name) if @cleaned_data && !@_cleaned_data[field_name].nil?
+    @_cleaned_data.delete(field_name) if @_cleaned_data && !@_cleaned_data[field_name].nil?
   end
 
   def regex_matching_or_unset?(field_data)

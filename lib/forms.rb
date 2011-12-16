@@ -4,7 +4,7 @@ require 'exceptions'
 class Form
   include TestModule if $test_env
   include Validation
-  attr_accessor :fields, :errors
+  attr_accessor :fields, :errors, :valid
 
   def initialize(data=nil)
     _define_defaults
@@ -18,6 +18,7 @@ class Form
       _validate_required_fields(data)
       _run_regex_validations(data)
       _run_custom_validations(data)
+      _run_whole_form_validations(data)
       _collect_errors #Should be last
     end
   end
