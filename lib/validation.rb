@@ -1,6 +1,5 @@
 module Validation
 
-
   def _run_default_validations(data)
     @fields.each do |field|
       field.default_validation(data[field.name]) if field.respond_to?(:default_validation)
@@ -37,7 +36,7 @@ module Validation
     @fields.each do |field|
       field_data = @raw_data[field.name.to_s]
       begin
-        self.send("cleaned_#{field.name}", field_data) if self.respond_to?("cleaned_#{field.name}")
+        @_cleaned_data[field.name.to_s] = self.send("cleaned_#{field.name}", field_data) if self.respond_to?("cleaned_#{field.name}")
       rescue FieldValidationError => error_message
         field.custom_invalidate!(error_message.to_s, field.name.to_s)
       end

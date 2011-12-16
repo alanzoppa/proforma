@@ -103,7 +103,7 @@ class ChoiceField < Field
   end
 
   def default_validation(datum)
-    unless @values.include?(datum) || datum.nil?
+    unless @values.include?(datum) || datum.nil? || @opts[:accept_any_string]
       self.valid = false
       @errors << @opts[:default_validation_message]
     end
@@ -166,7 +166,7 @@ class RadioChoiceField < Field
   end
 
   def default_validation(datum)
-    unless @values.include?(datum) || datum.nil?
+    unless @values.include?(datum) || datum.nil? || @opts[:accept_any_string]
       self.valid = false
       @errors << @opts[:default_validation_message]
     end
