@@ -1,9 +1,11 @@
 require 'validation'
 require 'exceptions'
+require 'getters'
 
 class Form
   include TestModule if $test_env
   include Validation
+  include Getters
   attr_accessor :fields, :errors, :valid
 
   def initialize(data=nil)
@@ -11,7 +13,7 @@ class Form
     _initialize_fields
     _prepare_getters
     _raise_usage_validations
-    unless data.nil?
+    unless data.nil? # Read: If it's time to do some validation
       raise ArgumentError.new("You can only validate a Hash") unless data.class == Hash
       @raw_data = dup_hash_with_string_keys(data).dup # Rails creates POST hashes with string keys
       @_cleaned_data = @raw_data.dup
@@ -24,14 +26,10 @@ class Form
     end
   end
 
-  def redefine_defaults
-    #redefine defaults per form by supering this
-  end
-
   def _define_defaults
     # defaults for @__settings below
     @__settings = {:wrapper => :p, :wrapper_attributes => nil, :pretty_print => true}
-    redefine_defaults
+    redefine_defaults if respond_to? :redefine_defaults
     @pretty_print = @__settings[:pretty_print]
   end
 
@@ -49,47 +47,6 @@ class Form
     field.attach_names!(field_name) if field.respond_to?(:attach_names!)
     field.pretty_print = @pretty_print
     @fields << field
-  end
-
-  def _prepare_getters
-    @queryable_structures = Hash.new
-    @fields.each do |field|
-      @queryable_structures[field.name.to_sym] = {
-        :field => field.to_html,
-        :label_tag => field.label_tag,
-        :help_text => field.help_text,
-        :errors => field.errors,
-        :instance => field
-      }
-    end
-  end
-  
-  def get_group field
-    return @queryable_structures[field.to_sym]
-  end
-
-  def get(type, field)
-    return get_group(field.to_sym)[type.to_sym]
-  end
-
-  def get_field field
-    return get_group(field)[:field]
-  end
-
-  def get_instance instance
-    return get_group(instance)[:instance]
-  end
-
-  def get_label_tag field
-    return get_group(field)[:label_tag]
-  end
-
-  def get_help_text field
-    return get_group(field)[:help_text]
-  end
-
-  def get_errors field
-    return get_group(field)[:errors]
   end
  
   def to_html(tag=@__settings[:wrapper], attributes=@__settings[:wrapper_attributes])

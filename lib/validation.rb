@@ -1,3 +1,6 @@
+# This isn't reused anywhere
+# It's abstracted into a module to promote readability
+
 module Validation
 
   def _run_default_validations(data)
@@ -95,5 +98,19 @@ module FieldValidation
   def regex_matching_or_unset?(field_data)
     # No need to invalidate if there is no regex set
     return @opts[:regex].nil? || !field_data.match(@opts[:regex]).nil?
+  end
+
+  def complain_about_invalid_data(datum)
+    raise ArgumentError.new("A #{self.class} expects a #{String} as validation input") unless datum.class == String
+  end
+
+  def filled?(datum)
+    #If this returns true, the field is filled
+    !datum.nil? && !datum.empty?
+  end
+
+  def invalidate!
+    @valid = false
+    @errors << @opts[:required_error]
   end
 end

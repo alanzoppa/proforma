@@ -44,20 +44,6 @@ class Field
     label_tag + to_html
   end
 
-  def complain_about_invalid_data(datum)
-    raise ArgumentError.new("A #{self.class} expects a #{String} as validation input") unless datum.class == String
-  end
-
-  def filled?(datum)
-    #If this returns true, the field is filled
-    !datum.nil? && !datum.empty?
-  end
-
-  def invalidate!
-    @valid = false
-    @errors << @opts[:required_error]
-  end
-
 end
 
 class TextField < Field
