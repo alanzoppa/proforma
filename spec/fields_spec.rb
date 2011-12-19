@@ -216,3 +216,25 @@ describe "A Form containing ChoiceFields" do
   end
 
 end
+
+
+describe "A field with custom wrappers" do
+  before do
+    class CustomNameVar < Form
+      @@description_of_derps = TextField.new("Herp some derps")
+      @@gender_choice = RadioChoiceField.new("Choose your gender", ["Male", "Female"])
+      @@cat = CheckboxField.new("Are you a cat?", :checked => :checked )
+      @@family = ChoiceField.new("Choose a family", ['Capulet', 'Montague', "Other"])
+
+      def redefine_defaults
+        @__settings[:hash_wrapper] = :something
+        #@__settings[:wrapper_attributes] = {:class => "more_complicated"}
+      end
+    end
+  end
+
+  it "should let the user configure the hash wrapper around name attributes" do
+    c = CustomNameVar.new
+    c.fields[0].name.should == :"something[description_of_derps]"
+  end
+end

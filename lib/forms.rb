@@ -39,6 +39,7 @@ class Form
     self.class.class_variables.each do |var|
       field = self.class.send("class_variable_get", var).dup # the field itself
       field_name = var.to_s.gsub(/^@@/, '') # the field's name with the leading "@@" stripped
+      field_name = "#{@__settings[:hash_wrapper]}[#{field_name}]" unless @__settings[:hash_wrapper].nil?
       _attach_field_attributes(field, field_name) if field.class.ancestors.include? Field
     end
   end

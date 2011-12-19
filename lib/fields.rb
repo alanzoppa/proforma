@@ -17,7 +17,6 @@ class Field
       :required_error => "'#{@label_text}' is required.",
       :regex_error => "'#{@label_text}' contains invalid input"
     }).merge(opts)
-    #puts "foobar".match(@opts[:regex]) unless @opts[:regex].nil?
     @help_text, @required = @opts[:help_text], @opts[:required]
     @type = self.class.to_s.gsub(/Field$/, '').downcase
     @valid = true
