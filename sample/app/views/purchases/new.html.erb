@@ -1,5 +1,13 @@
 <h1>New purchase</h1>
 
-<%= render 'form' %>
+<form accept-charset="UTF-8" action="/purchases" class="new_purchase" id="new_purchase" method="post">
+  <%= csrf_meta_tag %>
+  <%= @t.to_html.html_safe %>
+  <div class="actions">
+    <input name="commit" type="submit" value="Create Purchase" />
+  </div>
+</form>
+
+<%# render 'form' %>
 
 <%= link_to 'Back', purchases_path %>

@@ -7,15 +7,16 @@ Gem::Specification.new do |s|
   s.authors     = ["C. Alan Zoppa"]
   s.email       = 'alan.zoppa@gmail.com'
   s.files       = [
-    "lib/proforma.rb",
-    "lib/getters.rb",
-    "lib/fields.rb",
-    "lib/forms.rb",
-    "lib/exceptions.rb",
-    "lib/validation.rb",
-    "lib/helpers.rb",
-    "lib/proforma.rb"
+    "./lib/exceptions.rb",
+    "./lib/fields.rb",
+    "./lib/formhash.rb",
+    "./lib/forms.rb",
+    "./lib/getters.rb",
+    "./lib/helpers.rb",
+    "./lib/proforma.rb",
+    "./lib/validation.rb"
   ]
   s.homepage    =
     'http://rubygems.org/gems/proforma'
 end
+

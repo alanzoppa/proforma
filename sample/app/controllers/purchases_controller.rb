@@ -1,9 +1,10 @@
+require 'some_form'
+
 class PurchasesController < ApplicationController
   # GET /purchases
   # GET /purchases.json
   def index
     @purchases = Purchase.all
-
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @purchases }
@@ -25,6 +26,7 @@ class PurchasesController < ApplicationController
   # GET /purchases/new.json
   def new
     @purchase = Purchase.new
+    @t = TextFieldForm.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -40,7 +42,9 @@ class PurchasesController < ApplicationController
   # POST /purchases
   # POST /purchases.json
   def create
-    @purchase = Purchase.new(params[:purchase])
+    @purchase = Purchase.new
+    @purchase.name = params[:purchase_name]
+    @purchase.cost = params[:purchase_cost]
 
     respond_to do |format|
       if @purchase.save
