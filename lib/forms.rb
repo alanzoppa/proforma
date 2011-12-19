@@ -15,7 +15,7 @@ class Form
     _prepare_getters
     _raise_usage_validations
     unless data.nil? # Read: If it's time to do some validation
-      raise ArgumentError.new("You can only validate a Hash") unless data.class == Hash
+      raise ArgumentError.new("You can only validate a Hash") unless data.class.ancestors.include?(Hash)
       @raw_data = FormHash.import(data) # Rails creates POST hashes with string keys
       @_cleaned_data = @raw_data.dup
       _run_default_validations(data)

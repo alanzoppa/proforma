@@ -18,7 +18,7 @@ class FormHash < Hash
   end
 
   def self.import(regular_hash = nil)
-    if regular_hash.class == Hash
+    if regular_hash.class.ancestors.include?(Hash)
       h = FormHash.new
       regular_hash.each { |k,v| h[k] = v }
       return h
