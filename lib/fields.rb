@@ -7,7 +7,7 @@ require 'validation'
 class Field
   include TestModule if $test_env
   include FieldValidation
-  attr_accessor :type, :label_text, :name, :help_text, :html_id, :errors, :pretty_print, :required, :valid
+  attr_accessor :type, :label_text, :name, :help_text, :html_id, :errors, :pretty_print, :required, :valid, :hash_wrapper_name
 
   def initialize(label_text=nil, attributes=nil, opts={})
     @label_text, @attributes, = label_text, attributes
@@ -21,6 +21,7 @@ class Field
     @type = self.class.to_s.gsub(/Field$/, '').downcase
     @valid = true
     @errors = Array.new
+    @hash_wrapper_name = nil
   end
 
   def html_id
@@ -30,7 +31,8 @@ class Field
   def to_html
     value_pairs = @attributes.nil? ? Hash.new : @attributes.dup
     value_pairs[:type] = @type
-    value_pairs[:name] = self.name
+    value_pairs[:name] ||= self.hash_wrapper_name
+    value_pairs[:name] ||= self.name
     value_pairs[:id] = self.html_id
     return "<input #{flatten_attributes value_pairs} />"
   end

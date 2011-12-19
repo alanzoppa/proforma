@@ -42,9 +42,8 @@ class PurchasesController < ApplicationController
   # POST /purchases
   # POST /purchases.json
   def create
-    @purchase = Purchase.new
-    @purchase.name = params[:purchase_name]
-    @purchase.cost = params[:purchase_cost]
+    @purchase = Purchase.new(params[:purchase])
+    #form = TextFieldForm.new(params[:purchase])
 
     respond_to do |format|
       if @purchase.save
