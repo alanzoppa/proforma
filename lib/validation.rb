@@ -12,7 +12,7 @@ module Validation
   def _validate_required_fields(data)
     # Set the Field's valid bit to false if a required field doesn't pass its local definition of filled?
     @fields.each do |field|
-      field_data = @raw_data[field.name.to_s]
+      field_data = @raw_data[field.name]
       field.complain_about_invalid_data(field_data) unless field_data.nil?
       field.invalidate! if field.required? && !field.filled?(field_data)
     end
@@ -45,27 +45,25 @@ module Validation
 
   def _run_regex_validations(data)
     @fields.each do |field|
-      field_data = @raw_data[field.name.to_s]
-      field.regex_invalidate!(field.name.to_s) unless field.regex_matching_or_unset?(field_data)
+      field_data = @raw_data[field.name]
+      field.regex_invalidate!(field.name) unless field.regex_matching_or_unset?(field_data)
     end
   end
 
   def _run_custom_validations(data)
     @fields.each do |field|
-      field_data = @raw_data[field.name.to_s]
+      field_data = @raw_data[field.name]
       begin
-        @_cleaned_data[field.name.to_s] = self.send("cleaned_#{field.name}", field_data) if self.respond_to?("cleaned_#{field.name}")
+        @_cleaned_data[field.name] = self.send("cleaned_#{field.name}", field_data) if self.respond_to?("cleaned_#{field.name}")
       rescue FieldValidationError => error_message
-        field.custom_invalidate!(error_message.to_s, field.name.to_s)
+        field.custom_invalidate!(error_message.to_s, field.name)
       end
     end
   end
 
   def cleaned_data
     raise InvalidFormError.new("Cleaned data is not available on an invalid form.") unless self.valid?
-    output_hash = Hash.new
-    @_cleaned_data.each { |k,v| output_hash[k.to_sym] = v } #back to symbol keys
-    return output_hash
+    return @_cleaned_data
   end
 
   def _raise_usage_validations

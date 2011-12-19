@@ -1,6 +1,7 @@
 require 'validation'
 require 'exceptions'
 require 'getters'
+require 'formhash'
 
 class Form
   include TestModule if $test_env
@@ -15,7 +16,7 @@ class Form
     _raise_usage_validations
     unless data.nil? # Read: If it's time to do some validation
       raise ArgumentError.new("You can only validate a Hash") unless data.class == Hash
-      @raw_data = dup_hash_with_string_keys(data).dup # Rails creates POST hashes with string keys
+      @raw_data = FormHash.import(data) # Rails creates POST hashes with string keys
       @_cleaned_data = @raw_data.dup
       _run_default_validations(data)
       _validate_required_fields(data)

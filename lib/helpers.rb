@@ -20,10 +20,3 @@ def indent(str, depth=2)
   depth.times { |i| indent_spaces += ' ' }
   "#{indent_spaces}#{lines.join("\n#{indent_spaces}")}"
 end
-
-
-def dup_hash_with_string_keys hash
-  new_hash = Hash.new
-  hash.keys.each {|k| new_hash[k.to_s] = hash[k] }
-  return new_hash
-end

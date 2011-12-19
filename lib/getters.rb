@@ -3,9 +3,9 @@
 
 module Getters
   def _prepare_getters
-    @queryable_structures = Hash.new
+    @queryable_structures = FormHash.new
     @fields.each do |field|
-      @queryable_structures[field.name.to_sym] = {
+      @queryable_structures[field.name] = {
         :field => field.to_html,
         :label_tag => field.label_tag,
         :help_text => field.help_text,
@@ -16,11 +16,11 @@ module Getters
   end
 
   def get_group field
-    return @queryable_structures[field.to_sym]
+    return @queryable_structures[field]
   end
 
   def get(type, field)
-    return get_group(field.to_sym)[type.to_sym]
+    return get_group(field)[type]
   end
 
   def get_field field
