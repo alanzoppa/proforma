@@ -3,17 +3,33 @@ Feature: Adding purchases
 
   Scenario: Creating a purchase
     Given I am on the "New" page
-    When I input valid data
-    Then the object should be saved
+    When I submit a purchase called "Anything" that costs "5.00"
+    Then a purchase called "Anything" that costs "5.00" should be saved
 
   Scenario: Attempting to submit without filling in the 'cost' field
     Given I am on the "New" page
-    When I enter a $50 purchase
+    And I enter a $50 purchase
+    And I name my purchase ""
     Then submit the form
-    Then the object should not be saved
+    Then an error reading "'Purchase' is required." should be displayed
 
-  #Scenario: Creating a purchase over $100
-    #Given I am on the "New" page
-    #When I enter a $101 purchase
-    #Then the object should not be saved
+  Scenario: Creating a purchase over $100
+    Given I am on the "New" page
+    And I enter a $101 purchase
+    And I name my purchase "Some other thing"
+    Then submit the form
+    Then an error reading "There is a $100 limit." should be displayed
 
+  Scenario: Creating an otherwise valid purchase named Chumpy
+    Given I am on the "New" page
+    And I enter a $99 purchase
+    And I name my purchase "Chumpy"
+    Then submit the form
+    Then an error reading "You cannot name a puchase 'Chumpy.'" should be displayed
+
+  Scenario: Creating an overpriced purchase named Chumpy
+    Given I am on the "New" page
+    And I enter a $200 purchase
+    And I name my purchase "Chumpy"
+    Then submit the form
+    Then an error reading "This is right out!" should be displayed
