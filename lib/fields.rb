@@ -7,21 +7,40 @@ require 'validation'
 class Field
   include TestModule if $test_env
   include FieldValidation
-  attr_accessor :type, :label_text, :name, :help_text, :html_id, :errors, :pretty_print, :required, :valid, :hash_wrapper_name
+  attr_accessor :type,
+    :label_text,
+    :name,
+    :help_text,
+    :errors,
+    :pretty_print,
+    :required,
+    :valid,
+    :hash_wrapper_name,
+    :help_text_tag,
+    :help_text_class,
+    :error_tag,
+    :error_class
 
   def initialize(label_text=nil, attributes=nil, opts={})
     @label_text, @attributes, = label_text, attributes
-    @opts = ({
-      :help_text => nil,
-      :required => false,
-      :required_error => "'#{@label_text}' is required.",
-      :regex_error => "'#{@label_text}' contains invalid input"
-    }).merge(opts)
+    _setup_options(opts)
     @help_text, @required = @opts[:help_text], @opts[:required]
     @type = self.class.to_s.gsub(/Field$/, '').downcase
     @valid = true
     @errors = Array.new
-    @hash_wrapper_name = nil
+  end
+
+  def _setup_options(opts)
+    @opts = ({
+      #:help_text => nil,
+      #:required => false,
+      :required_error => "'#{@label_text}' is required.",
+      :regex_error => "'#{@label_text}' contains invalid input"
+    }).merge(opts)
+    @help_text_tag = :div
+    @help_text_class = :help_text
+    @error_tag = :ul
+    @error_class = :field_errors
   end
 
   def html_id
@@ -45,6 +64,36 @@ class Field
     label_tag + to_html
   end
 
+  def error_html
+    return "" if @errors.nil? or @errors.empty?
+    field_errors = String.new
+    @errors.each do |e|
+      if @pretty_print
+        field_errors += "\n" + indent(wrap_tag(e, :li)) + "\n"
+      else
+        field_errors += wrap_tag(e, :div)
+      end
+    end
+    return wrap_tag(field_errors, @error_tag, :class => @error_class, :id => "#{html_id}_errors")
+  end
+
+  def help_text_html
+    return "" if @help_text.nil? or @help_text.empty?
+    field_help_text = wrap_tag(@help_text, @help_text_tag, :class => @help_text_class, :id => "#{html_id}_help_text")
+    field_help_text = "#{field_help_text}\n" if @pretty_print
+    return field_help_text
+  end
+
+  def to_full_html
+    if @pretty_print
+      output = String.new
+      output += error_html + "\n" unless error_html.empty?
+      output += to_labeled_html + "\n"
+      output += help_text_html + "\n" unless help_text_html.empty?
+      return output
+    end
+    return "#{error_html}\n#{to_labeled_html}\n#{help_text_html}"
+  end
 end
 
 class TextField < Field

@@ -26,7 +26,7 @@ class PurchasesController < ApplicationController
   # GET /purchases/new.json
   def new
     @purchase = Purchase.new
-    @t = TextFieldForm.new
+    @form = TextFieldForm.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -42,14 +42,12 @@ class PurchasesController < ApplicationController
   # POST /purchases
   # POST /purchases.json
   def create
-    #puts params[:purchase].class.ancestors
-    form = TextFieldForm.new(params[:purchase])
-    if form.valid?
-      @purchase = Purchase.new(params[:purchase])
-    end
+    @form = TextFieldForm.new(params[:purchase])
+    @purchase = Purchase.new(params[:purchase])
 
     respond_to do |format|
-      if @purchase.save
+      if @form.valid?
+        @purchase.save
         format.html { redirect_to @purchase, notice: 'Purchase was successfully created.' }
         format.json { render json: @purchase, status: :created, location: @purchase }
       else

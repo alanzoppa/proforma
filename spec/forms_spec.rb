@@ -66,7 +66,7 @@ describe "A more complicated form with multiple fields" do
 
   before do
     class MoreComplicatedForm < Form
-      @@description_of_derps = TextField.new("Herp some derps")
+      @@description_of_derps = TextField.new("Herp some derps", nil, :help_text => "Explain how the derps were herped")
       @@gender_choice = RadioChoiceField.new("Choose your gender", ["Male", "Female"])
       @@cat = CheckboxField.new("Are you a cat?", :checked => :checked )
       @@family = ChoiceField.new("Choose a family", ['Capulet', 'Montague', "Other"])
@@ -86,10 +86,7 @@ describe "A more complicated form with multiple fields" do
   end
 
   it "should generate four <divs> with the class 'more_complicated'" do
-    #print "\n" + @more_complicated_form.to_html
-    (0..3).each do |i|
-      @more_complicated_form._noko_nth(:div, i)[:class].should == "more_complicated"
-    end
+    Nokogiri::HTML(@more_complicated_form.to_html).search('div.more_complicated').length.should == 4
   end
 
   it "should set pretty_print to true on all fields" do
@@ -100,6 +97,7 @@ describe "A more complicated form with multiple fields" do
     @more_complicated_form.to_html.should == [
       "<div class='more_complicated'>",
       "  <label for='id_description_of_derps'>Herp some derps</label><input type='text' name='description_of_derps' id='id_description_of_derps' />",
+      "  <div class='help_text' id='id_description_of_derps_help_text'>Explain how the derps were herped</div>",
       "</div>",
       "<div class='more_complicated'>",
       "  <label for='id_gender_choice'>Choose your gender</label>",

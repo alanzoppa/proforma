@@ -53,6 +53,17 @@ describe "A form with fields who have interdependent validations" do
     form.cleaned_data[:second_number].class.should == Fixnum
   end
 
+  it "should not render div.errors when the input is valid" do
+    form = MultipleValidationTextFieldForm.new({:first_number => "3", :second_number => "7"})
+    form._noko_first(:div).should be_nil
+  end
+
+  it "should print the errors, if any, by default" do
+    form = MultipleValidationTextFieldForm.new({:first_number => "3", :second_number => "6"})
+    form._noko_first(:div)[:class].should == "errors"
+    form._noko_first(:div).content.should == "First Number and Second Number must add up to 10"
+  end
+
 end
 
 

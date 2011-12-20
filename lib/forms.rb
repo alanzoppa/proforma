@@ -48,16 +48,22 @@ class Form
     field.attach_names!(field_name) if field.respond_to?(:attach_names!)
     field.pretty_print = @pretty_print
     field.hash_wrapper_name = "#{@__settings[:hash_wrapper]}[#{field_name}]" unless @__settings[:hash_wrapper].nil?
+    field.help_text_tag = @__settings[:help_text_tag] unless @__settings[:help_text_tag].nil?
+    field.help_text_class = @__settings[:help_text_class] unless @__settings[:help_text_class].nil?
+    field.error_tag = @__settings[:error_tag] unless @__settings[:error_tag].nil?
+    field.error_class = @__settings[:error_class] unless @__settings[:error_class].nil?
     @fields << field
   end
  
   def to_html(tag=@__settings[:wrapper], attributes=@__settings[:wrapper_attributes])
     output = String.new
+    output += wrap_tag(@errors[:form], :div, :class => :errors) unless @errors.nil? or @errors[:form].nil?
     @fields.each do |field|
       if @pretty_print
-        field_contents = "\n#{indent(field.to_labeled_html)}\n"
+        output += "\n" unless @errors.nil? or @errors[:form].nil?
+        field_contents = "\n#{indent(field.to_full_html)}\n"
         output += wrap_tag(field_contents, tag, attributes)
-        output = "#{output}\n" unless field == @fields.last and @fields.length > 1
+        output += "\n" unless field == @fields.last and @fields.length > 1
       else
         output += wrap_tag(field.to_labeled_html, tag, attributes)
       end

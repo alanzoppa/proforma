@@ -6,7 +6,7 @@ require '../lib/proforma'
 describe "A form with custom validations" do
   before :each do
     class CustomValidationForm < Form
-      @@description_of_the_derps = TextField.new("Herp some derps")
+      @@description_of_the_derps = TextField.new("Herp some derps", nil, :help_text => "Explain how derps were herped.")
       @@gender_choice = RadioChoiceField.new("Choose your gender", ["Male", "Female"])
       @@cat = CheckboxField.new("Are you a cat?", :checked => :checked )
       @@family = ChoiceField.new("Choose a family", ['Capulet', 'Montague', "Other"])
@@ -18,6 +18,11 @@ describe "A form with custom validations" do
 
     end
 
+  end
+
+  it "should render the appropriate help text" do
+    @invalid_custom_validation_form = CustomValidationForm.new
+    @invalid_custom_validation_form._noko_first('div.help_text').content.should == "Explain how derps were herped."
   end
 
   it "should have a validation error unless the input is 'one two three'" do

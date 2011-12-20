@@ -2,7 +2,7 @@
 
 <form accept-charset="UTF-8" action="/purchases" class="new_purchase" id="new_purchase" method="post">
   <%= csrf_meta_tag %>
-  <%= @t.to_html.html_safe %>
+  <%= @form.to_html.html_safe %>
   <div class="actions">
     <input name="commit" type="submit" value="Create Purchase" />
   </div>
