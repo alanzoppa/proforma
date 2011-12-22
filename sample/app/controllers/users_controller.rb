@@ -43,7 +43,11 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.json
   def create
-    @form = RegistrationForm.new(params[:user])
+    if request.post?
+      @form = RegistrationForm.new(params[:user])
+    else
+      @form = RegistrationForm.new()
+    end
     @user = User.new(params[:user])
 
     respond_to do |format|

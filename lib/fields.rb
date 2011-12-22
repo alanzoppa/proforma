@@ -165,7 +165,7 @@ class RadioField < Field
   def initialize(value=nil, attributes = Hash.new, opts={})
     super(label_text=nil, attributes=attributes, opts=opts)
     @label_text, @value = value, value
-    @attributes[:value] = @value.downcase
+    @attributes[:value] = @value
   end
 
   def html_id

@@ -6,6 +6,7 @@ module Validation
   def _run_simple_validations(data)
     # Set the Field's valid bit to false if a required field doesn't pass its local definition of filled?
     @fields.each do |field|
+      field.errors = []
       field_data = @raw_data[field.name]
       field.default_validation(field_data) if field.respond_to?(:default_validation)
       field.complain_about_invalid_data(field_data) unless field_data.nil?

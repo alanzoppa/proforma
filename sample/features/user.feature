@@ -9,4 +9,5 @@ Feature: Adding purchases
     And I choose "Male" as my gender choice
     And I enter "Just your average Veronan" as my Bio
     And I deny that I am a cat
-    Then submit the User form
+    And I submit the User form
+    Then a user named "Alan" should be saved

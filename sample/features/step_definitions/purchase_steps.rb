@@ -22,7 +22,7 @@ And /^I name my purchase "([^"]*)"$/ do |name|
   fill_in 'Purchase', :with => name
 end
 
-Then /^submit the (.*) form$/ do |model|
+Then /^I submit the (.*) form$/ do |model|
   click_button "Create #{model}"
 end
 

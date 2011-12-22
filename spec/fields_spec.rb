@@ -101,7 +101,7 @@ describe "A Low-level RadioField" do
   end
 
   it "should generate inputs with associated labels" do
-    @gender_choice.to_labeled_html.should == "  <input value='male' type='radio' name='gender_choice' id='id_gender_choice_male' /><label for='id_gender_choice_male'>Male</label>\n"
+    @gender_choice.to_labeled_html.should == "  <input value='Male' type='radio' name='gender_choice' id='id_gender_choice_male' /><label for='id_gender_choice_male'>Male</label>\n"
   end
 
 end
@@ -161,12 +161,12 @@ describe "A Form containing RadioFields" do
   end
 
   it "should have sub-fields that render correctly" do
-    @male_field.to_html.should == "<input value='male' type='radio' name='gender' id='id_gender_male' />"
+    @male_field.to_html.should == "<input value='Male' type='radio' name='gender' id='id_gender_male' />"
   end
 
   it "should assign values based on symbolized entries in the array" do
-    @female_field._noko_first(:input)[:value].should == 'female'
-    @male_field._noko_first(:input)[:value].should == 'male'
+    @female_field._noko_first(:input)[:value].should == 'Female'
+    @male_field._noko_first(:input)[:value].should == 'Male'
   end
 
   it "should assign create a type='radio' field for each Array member" do
