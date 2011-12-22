@@ -12,6 +12,11 @@ class RegistrationForm < Form
     @__settings[:hash_wrapper] = :user
   end
 
+  def cleaned_bio(datum)
+    raise FieldValidationError.new("Only Veronans allowed!") unless datum.match("Veronan")
+    return datum
+  end
+
 end
 
 #rails g scaffold User first_name:string middle_initial:string last_name:string gender_choice:string bio:text cat:boolean

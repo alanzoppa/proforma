@@ -117,8 +117,8 @@ class CheckboxField < Field
   end
 
   def complain_about_invalid_data(datum)
-    return if ["on", "off"].include? datum
-    raise ArgumentError.new("#{self.class} validation data must be a boolean") unless [TrueClass, FalseClass].include?(datum.class)
+    return if ["on", "off", nil, true, false, ""].include? datum
+    raise ArgumentError.new("#{self.class} validation data must be a boolean.")
   end
 
   def filled?(datum)

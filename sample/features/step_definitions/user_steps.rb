@@ -22,6 +22,5 @@ Given /^I (.*) that I am a cat$/ do |bool|
 end
 
 Given /^a user named "([^"]*)" should be saved$/ do |name|
-  puts User.find :all
-  #User.find(:first, :conditions => "first_name = '#{name}'").first_name.should == name
+  User.find(:first, :conditions => "first_name = '#{name}'").first_name.should == name
 end
