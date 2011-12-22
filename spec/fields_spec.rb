@@ -237,3 +237,32 @@ describe "A field with custom wrappers" do
     c.fields[0]._noko_first(:input)[:name].should == "something[description_of_derps]"
   end
 end
+
+
+describe "A Textarea field" do
+  before do
+    class TextAreaForm < Form
+      @@bio = TextAreaField.new("Herp some derps", nil, :help_text => "Fill in this form")
+    end
+
+    @form = TextAreaForm.new
+    @textarea = @form._noko_first(:textarea)
+  end
+
+  it "should render a <textarea> tag" do
+    @textarea.should_not be_nil
+  end
+
+  it "should not have a type attribute by default" do
+    @textarea[:type].should be_nil
+  end
+
+  it "should name itself properly" do
+    @textarea[:name].should == 'bio'
+  end
+  
+  it "generate its own id" do
+    @textarea[:id].should == 'id_bio'
+  end
+
+end

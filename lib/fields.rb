@@ -55,7 +55,7 @@ class Field
     value_pairs[:name] ||= self.hash_wrapper_name
     value_pairs[:name] ||= self.name
     value_pairs[:id] = self.html_id
-    return "<input #{flatten_attributes value_pairs} />"
+    "<input #{flatten_attributes value_pairs} />"
   end
 
   def label_tag
@@ -99,6 +99,16 @@ class Field
 end
 
 class TextField < Field
+end
+
+class TextAreaField < Field
+  def to_html
+    value_pairs = @attributes.nil? ? Hash.new : @attributes.dup
+    value_pairs[:name] ||= self.hash_wrapper_name
+    value_pairs[:name] ||= self.name
+    value_pairs[:id] = self.html_id
+    return "<textarea #{flatten_attributes value_pairs}></textarea>"
+  end
 end
 
 class CheckboxField < Field
