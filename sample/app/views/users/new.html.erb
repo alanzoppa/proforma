@@ -1,0 +1,13 @@
+<h1>New user</h1>
+
+<form accept-charset="UTF-8" action="/users" class="new_user" id="new_user" method="post">
+  <%= csrf_meta_tag %>
+  <%= @form.to_html.html_safe %>
+  <div class="actions">
+    <input name="commit" type="submit" value="Create User" />
+  </div>
+</form>
+
+<%# render 'form' %>
+
+<%= link_to 'Back', users_path %>

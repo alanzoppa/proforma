@@ -1,7 +1,7 @@
 #rake db:test:prepare
 
-Given /^I am on the "([^"]*)" page$/ do |page|
-  visit("/purchases/#{page.downcase}")
+Given /^I am on the "([^"]*) ([^"]*)" page$/ do |action,controller|
+  visit("/#{controller.downcase}s/#{action.downcase}")
 end
 
 When /^I submit a purchase called "([^"]*)" that costs "([^"]*)"$/ do |purchase,cost|
@@ -22,8 +22,8 @@ And /^I name my purchase "([^"]*)"$/ do |name|
   fill_in 'Purchase', :with => name
 end
 
-Then /^submit the form$/ do
-  click_button "Create Purchase"
+Then /^submit the (.*) form$/ do |model|
+  click_button "Create #{model}"
 end
 
 Then /^the object should not be saved$/ do
