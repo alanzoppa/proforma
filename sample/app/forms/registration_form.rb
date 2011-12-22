@@ -7,9 +7,7 @@ class RegistrationForm < Form
   @@cat = CheckboxField.new("Are you a cat?", :checked => :checked )
 
   def redefine_defaults
-    @settings[:wrapper] = :div
-    @settings[:wrapper_attributes] = {:class => :field}
-    @settings[:hash_wrapper] = :user
+    { :wrapper => :div, :wrapper_attributes => {:class => :field}, :hash_wrapper => :user }
   end
 
   def cleaned_bio(datum)

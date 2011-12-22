@@ -29,7 +29,7 @@ class Form
   def _define_defaults
     # defaults for @settings below
     @settings = {:wrapper => :p, :wrapper_attributes => nil, :pretty_print => true}
-    redefine_defaults if respond_to? :redefine_defaults
+    @settings = @settings.merge(redefine_defaults) if respond_to? :redefine_defaults
     @pretty_print = @settings[:pretty_print]
   end
 

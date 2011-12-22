@@ -227,7 +227,7 @@ describe "A field with custom wrappers" do
       @@family = ChoiceField.new("Choose a family", ['Capulet', 'Montague', "Other"])
 
       def redefine_defaults
-        @settings[:hash_wrapper] = :something
+        {:hash_wrapper => :something}
       end
     end
   end
