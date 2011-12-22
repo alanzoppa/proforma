@@ -3,9 +3,9 @@ class TextFieldForm < Form
   @@cost = TextField.new("Cost", nil, :required=>true)
 
   def redefine_defaults
-    @__settings[:wrapper] = :div
-    @__settings[:wrapper_attributes] = {:class => :field}
-    @__settings[:hash_wrapper] = :purchase
+    @settings[:wrapper] = :div
+    @settings[:wrapper_attributes] = {:class => :field}
+    @settings[:hash_wrapper] = :purchase
   end
 
   def cleaned_cost(cost)

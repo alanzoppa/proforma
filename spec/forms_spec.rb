@@ -13,8 +13,8 @@ describe "A Form with a TextField" do
 
     class DefaultAttributesForm < Form
       def redefine_defaults
-        @__settings[:wrapper] = :span
-        @__settings[:wrapper_attributes] = {:class => :some_herps}
+        @settings[:wrapper] = :span
+        @settings[:wrapper_attributes] = {:class => :some_herps}
       end
 
       @@text_field = TextField.new("Herp some derps")
@@ -72,8 +72,8 @@ describe "A more complicated form with multiple fields" do
       @@family = ChoiceField.new("Choose a family", ['Capulet', 'Montague', "Other"])
 
       def redefine_defaults
-        @__settings[:wrapper] = :div
-        @__settings[:wrapper_attributes] = {:class => "more_complicated"}
+        @settings[:wrapper] = :div
+        @settings[:wrapper_attributes] = {:class => "more_complicated"}
       end
 
     end
@@ -132,9 +132,9 @@ describe "The same form without line breaks" do
       @@family = ChoiceField.new("Choose a family", ['Capulet', 'Montague', "Other"])
 
       def redefine_defaults
-        @__settings[:wrapper] = :div
-        @__settings[:wrapper_attributes] = {:class => "more_complicated"}
-        @__settings[:pretty_print] = false
+        @settings[:wrapper] = :div
+        @settings[:wrapper_attributes] = {:class => "more_complicated"}
+        @settings[:pretty_print] = false
       end
 
     end

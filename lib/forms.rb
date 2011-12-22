@@ -27,10 +27,10 @@ class Form
   end
 
   def _define_defaults
-    # defaults for @__settings below
-    @__settings = {:wrapper => :p, :wrapper_attributes => nil, :pretty_print => true}
+    # defaults for @settings below
+    @settings = {:wrapper => :p, :wrapper_attributes => nil, :pretty_print => true}
     redefine_defaults if respond_to? :redefine_defaults
-    @pretty_print = @__settings[:pretty_print]
+    @pretty_print = @settings[:pretty_print]
   end
 
   def _initialize_fields
@@ -44,17 +44,17 @@ class Form
 
   def _attach_field_attributes(field, field_name)
     field.name = field_name.to_sym
-    field.hash_wrapper_name = "#{@__settings[:hash_wrapper]}[#{field_name}]" unless @__settings[:hash_wrapper].nil?
+    field.hash_wrapper_name = "#{@settings[:hash_wrapper]}[#{field_name}]" unless @settings[:hash_wrapper].nil?
     field.attach_names!(field_name) if field.respond_to?(:attach_names!)
     field.pretty_print = @pretty_print
-    field.help_text_tag = @__settings[:help_text_tag] unless @__settings[:help_text_tag].nil?
-    field.help_text_class = @__settings[:help_text_class] unless @__settings[:help_text_class].nil?
-    field.error_tag = @__settings[:error_tag] unless @__settings[:error_tag].nil?
-    field.error_class = @__settings[:error_class] unless @__settings[:error_class].nil?
+    field.help_text_tag = @settings[:help_text_tag] unless @settings[:help_text_tag].nil?
+    field.help_text_class = @settings[:help_text_class] unless @settings[:help_text_class].nil?
+    field.error_tag = @settings[:error_tag] unless @settings[:error_tag].nil?
+    field.error_class = @settings[:error_class] unless @settings[:error_class].nil?
     @fields << field
   end
  
-  def to_html(tag=@__settings[:wrapper], attributes=@__settings[:wrapper_attributes])
+  def to_html(tag=@settings[:wrapper], attributes=@settings[:wrapper_attributes])
     output = String.new
     output += wrap_tag(@errors[:form], :div, :class => :errors) unless @errors.nil? or @errors[:form].nil?
     @fields.each do |field|
