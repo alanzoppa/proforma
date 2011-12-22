@@ -232,9 +232,16 @@ describe "A field with custom wrappers" do
     end
   end
 
+  it "should create 4 fields" do
+    b = CustomNameVarForm.new
+    b.fields.length.should == 4
+  end
+
   it "should let the user configure the hash wrapper around name attributes" do
     c = CustomNameVarForm.new
-    c.fields[0]._noko_first(:input)[:name].should == "something[description_of_derps]"
+    c.fields.each do |field|
+      field.to_html.match(/name='something\[#{field.name}\]'/).should_not be_nil
+    end
   end
 end
 

@@ -44,9 +44,9 @@ class Form
 
   def _attach_field_attributes(field, field_name)
     field.name = field_name.to_sym
+    field.hash_wrapper_name = "#{@__settings[:hash_wrapper]}[#{field_name}]" unless @__settings[:hash_wrapper].nil?
     field.attach_names!(field_name) if field.respond_to?(:attach_names!)
     field.pretty_print = @pretty_print
-    field.hash_wrapper_name = "#{@__settings[:hash_wrapper]}[#{field_name}]" unless @__settings[:hash_wrapper].nil?
     field.help_text_tag = @__settings[:help_text_tag] unless @__settings[:help_text_tag].nil?
     field.help_text_class = @__settings[:help_text_class] unless @__settings[:help_text_class].nil?
     field.error_tag = @__settings[:error_tag] unless @__settings[:error_tag].nil?

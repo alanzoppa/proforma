@@ -117,6 +117,7 @@ class CheckboxField < Field
   end
 
   def complain_about_invalid_data(datum)
+    return if ["on", "off"].include? datum
     raise ArgumentError.new("#{self.class} validation data must be a boolean") unless [TrueClass, FalseClass].include?(datum.class)
   end
 
@@ -144,8 +145,10 @@ class ChoiceField < Field
   end
 
   def to_html
+    usable_name ||= self.hash_wrapper_name
+    usable_name ||= self.name
     option_fields = _html_options + "\n" if @pretty_print
-    output = wrap_tag(option_fields, :select, {:id => html_id, :name => @name})
+    output = wrap_tag(option_fields, :select, {:id => html_id, :name => usable_name})
     output = "\n" + output if @pretty_print
     return output
   end
@@ -195,7 +198,10 @@ class RadioChoiceField < Field
   end
 
   def attach_names! name
-    @fields.each {|field| field.name = name }
+    @fields.each do |field|
+      field.hash_wrapper_name = self.hash_wrapper_name
+      field.name = name
+    end
   end
 
   def _html_options

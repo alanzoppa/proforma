@@ -1,4 +1,6 @@
 Sample::Application.routes.draw do
+  resources :users
+
   resources :purchases
 
   # The priority is based upon order of creation:
