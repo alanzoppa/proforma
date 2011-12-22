@@ -3,18 +3,14 @@
 
 module Validation
 
-  def _run_default_validations(data)
-    @fields.each do |field|
-      field.default_validation(data[field.name]) if field.respond_to?(:default_validation)
-    end
-  end
-
-  def _validate_required_fields(data)
+  def _run_simple_validations(data)
     # Set the Field's valid bit to false if a required field doesn't pass its local definition of filled?
     @fields.each do |field|
       field_data = @raw_data[field.name]
+      field.default_validation(field_data) if field.respond_to?(:default_validation)
       field.complain_about_invalid_data(field_data) unless field_data.nil?
       field.invalidate! if field.required? && !field.filled?(field_data)
+      field.length_validation(field_data) if field.respond_to?(:length_validation)
     end
   end
 
@@ -111,4 +107,17 @@ module FieldValidation
     @valid = false
     @errors << @opts[:required_error]
   end
+
+  def length_validation(datum)
+    measurable_datum = datum.to_s
+    if @opts[:max_length] && measurable_datum.length > @opts[:max_length]
+      self.valid = false
+      @errors << @opts[:max_length_error]
+    elsif @opts[:min_length] && measurable_datum.length < @opts[:min_length]
+      self.valid = false
+      @errors << @opts[:min_length_error]
+    end
+  end
+
+
 end

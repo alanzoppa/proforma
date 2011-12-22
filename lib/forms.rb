@@ -18,8 +18,7 @@ class Form
       raise ArgumentError.new("You can only validate a Hash") unless data.class.ancestors.include?(Hash)
       @raw_data = FormHash.import(data) # Rails creates POST hashes with string keys
       @_cleaned_data = @raw_data.dup
-      _run_default_validations(data)
-      _validate_required_fields(data)
+      _run_simple_validations(data)
       _run_regex_validations(data)
       _run_custom_validations(data)
       _run_whole_form_validations(data)

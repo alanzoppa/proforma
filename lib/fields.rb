@@ -34,6 +34,8 @@ class Field
     @opts = ({
       #:help_text => nil,
       #:required => false,
+      :max_length_error => "Input is limited to #{opts[:max_length]} characters.",
+      :min_length_error => "Input must be at least #{opts[:min_length]} characters.",
       :required_error => "'#{@label_text}' is required.",
       :regex_error => "'#{@label_text}' contains invalid input"
     }).merge(opts)
