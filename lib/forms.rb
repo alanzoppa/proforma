@@ -46,11 +46,11 @@ class Form
     field.name = field_name.to_sym
     field.hash_wrapper_name = "#{@settings[:hash_wrapper]}[#{field_name}]" unless @settings[:hash_wrapper].nil?
     field.attach_names!(field_name) if field.respond_to?(:attach_names!)
-    field.pretty_print = @pretty_print
     field.help_text_tag = @settings[:help_text_tag] unless @settings[:help_text_tag].nil?
     field.help_text_class = @settings[:help_text_class] unless @settings[:help_text_class].nil?
     field.error_tag = @settings[:error_tag] unless @settings[:error_tag].nil?
     field.error_class = @settings[:error_class] unless @settings[:error_class].nil?
+    field.form_settings = @settings
     @fields << field
   end
  

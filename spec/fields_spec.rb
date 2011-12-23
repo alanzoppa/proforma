@@ -88,7 +88,7 @@ describe "A Low-level RadioField" do
 
   before do
     class DerpForm < Form
-      @@gender_choice = RadioField.new("Male")
+      @@gender_choice = RadioField.new("Male", FormHash.new)
     end
     @gender_choice = DerpForm.new.fields[1]
   end

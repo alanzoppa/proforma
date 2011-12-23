@@ -12,7 +12,7 @@ class Field
     :name,
     :help_text,
     :errors,
-    :pretty_print,
+    :form_settings,
     :required,
     :valid,
     :hash_wrapper_name,
@@ -72,7 +72,7 @@ class Field
     return "" if @errors.nil? or @errors.empty?
     field_errors = String.new
     @errors.each do |e|
-      if @pretty_print
+      if @form_settings[:pretty_print]
         field_errors += "\n" + indent(wrap_tag(e, :li)) + "\n"
       else
         field_errors += wrap_tag(e, :div)
@@ -84,12 +84,12 @@ class Field
   def help_text_html
     return "" if @help_text.nil? or @help_text.empty?
     field_help_text = wrap_tag(@help_text, @help_text_tag, :class => @help_text_class, :id => "#{html_id}_help_text")
-    field_help_text = "#{field_help_text}\n" if @pretty_print
+    field_help_text = "#{field_help_text}\n" if @form_settings[:pretty_print]
     return field_help_text
   end
 
   def to_full_html
-    if @pretty_print
+    if @form_settings[:pretty_print]
       output = String.new
       output += error_html + "\n" unless error_html.empty?
       output += to_labeled_html + "\n"
@@ -142,16 +142,16 @@ class ChoiceField < Field
   def _html_options
     html_options = @values.map { |v|
       tag = wrap_tag(v, :option, {:value => v})
-      tag = "\n  #{tag}" if @pretty_print
+      tag = "\n  #{tag}" if @form_settings[:pretty_print]
     }.join
   end
 
   def to_html
     usable_name ||= self.hash_wrapper_name
     usable_name ||= self.name
-    option_fields = _html_options + "\n" if @pretty_print
+    option_fields = _html_options + "\n" if @form_settings[:pretty_print]
     output = wrap_tag(option_fields, :select, {:id => html_id, :name => usable_name})
-    output = "\n" + output if @pretty_print
+    output = "\n" + output if @form_settings[:pretty_print]
     return output
   end
 
@@ -164,10 +164,12 @@ class ChoiceField < Field
 end
 
 class RadioField < Field
-  def initialize(value=nil, attributes = Hash.new, opts={})
-    super(label_text=nil, attributes=attributes, opts=opts)
+  def initialize(value, form_settings)
+    super(label_text=nil, attributes=Hash.new, opts=Hash.new)
     @label_text, @value = value, value
     @attributes[:value] = @value
+    @form_settings = form_settings
+    @form_settings ||= FormHash.new
   end
 
   def html_id
@@ -176,7 +178,7 @@ class RadioField < Field
 
   def to_labeled_html
     output = to_html + label_tag
-    output = indent(output) + "\n" if @pretty_print
+    output = indent(output) + "\n" if @form_settings[:pretty_print]
     return output
   end
 end
@@ -188,7 +190,8 @@ class RadioChoiceField < Field
     super(label_text, attributes, opts)
     @opts[:default_validation_message] ||= "Not an available choice"
     @values = values
-    @fields = values.map { |value| RadioField.new(value) }
+    @fields = Array.new
+    @fields = values.map { |value| RadioField.new(value, @form_settings) }
   end
 
   def filled?(datum)
@@ -208,17 +211,17 @@ class RadioChoiceField < Field
 
   def _html_options
     @fields.map { |v|
-      @pretty_print ? indent(v.to_labeled_html) + "\n" : v.to_labeled_html 
+      @form_settings[:pretty_print] ? indent(v.to_labeled_html) + "\n" : v.to_labeled_html 
     }.join
   end
 
   def fieldset_legend
     tag = wrap_tag(label_text, :legend)
-    @pretty_print ? "\n#{indent(tag)}\n" : tag
+    @form_settings[:pretty_print] ? "\n#{indent(tag)}\n" : tag
   end
 
   def to_html
-    ( @pretty_print ? "\n" : "" ) + wrap_tag(fieldset_legend + self._html_options, :fieldset, {:id => html_id})
+    ( @form_settings[:pretty_print] ? "\n" : "" ) + wrap_tag(fieldset_legend + self._html_options, :fieldset, {:id => html_id})
   end
 
   def default_validation(datum)

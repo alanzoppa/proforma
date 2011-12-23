@@ -88,7 +88,7 @@ describe "A more complicated form with multiple fields" do
   end
 
   it "should set pretty_print to true on all fields" do
-    @more_complicated_form.fields.all? {|f| f.pretty_print == true }.should be_true
+    @more_complicated_form.fields.all? {|f| f.form_settings[:pretty_print] == true }.should be_true
   end
 
   it "should produce a properly indented form" do
@@ -152,7 +152,7 @@ describe "The same form without line breaks" do
   end
 
   it "should set pretty_print to false on all fields" do
-    @cleaner_form.fields.all? {|f| f.pretty_print == false }.should be_true
+    @cleaner_form.fields.all? {|f| f.form_settings[:pretty_print] == false }.should be_true
   end
 
 end
