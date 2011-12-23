@@ -8,7 +8,7 @@ describe "A Low level TextField" do
 
   before do
     class DerpForm < Form
-      @@derp_field = TextField.new("Herp some derps")
+      @@derp_field = TextField.new("Herp some derps", nil, :max_length=>2)
     end
     @derp_field = DerpForm.new.fields[0]
   end
@@ -34,6 +34,11 @@ describe "A Low level TextField" do
     @derp_field.label_text.should == "Herp some derps"
   end
 
+  it "should re-insert values if validation fails" do
+    d = DerpForm.new(:derp_field=>"abc")
+    d._noko_first(:input)[:value].should == 'abc'
+  end
+
 end
 
 describe "A Checkbox field" do
@@ -41,10 +46,15 @@ describe "A Checkbox field" do
     class UglinessForm < Form
       @@ugly = CheckboxField.new("Check here if ugly")
       @@stupid = CheckboxField.new("Check here if stupid")
+
+      def cleaned_form(datum)
+        raise FormValidationError.new("This form is never valid")
+      end
     end
     @ugliness_form = UglinessForm.new
     @ugly_field = @ugliness_form.fields[0]
     @stupid_field = @ugliness_form.fields[1]
+
   end
 
   it "should have the checkbox type" do
@@ -64,6 +74,11 @@ describe "A Checkbox field" do
 
   it "should render correctly" do
     @stupid_field.to_labeled_html.should == "<input type='checkbox' name='stupid' id='id_stupid' /><label for='id_stupid'>Check here if stupid</label>"
+  end
+
+  it "should retain posted values" do
+    u = UglinessForm.new(:stupid => "on", :ugly=> "on")
+    puts u.to_html
   end
 
 end
@@ -249,7 +264,7 @@ end
 describe "A Textarea field" do
   before do
     class TextAreaForm < Form
-      @@bio = TextAreaField.new("Herp some derps", nil, :help_text => "Fill in this form")
+      @@bio = TextAreaField.new("Herp some derps", nil, :help_text => "Fill in this form", :min_length => 2)
     end
 
     @form = TextAreaForm.new
@@ -270,6 +285,12 @@ describe "A Textarea field" do
   
   it "generate its own id" do
     @textarea[:id].should == 'id_bio'
+  end
+
+  it "should regenerate values after posts" do
+    posted_form = TextAreaForm.new({:bio => 'a'})
+    posted_form.valid?.should be_false
+    posted_form._noko_first(:textarea).content.should == 'a'
   end
 
 end

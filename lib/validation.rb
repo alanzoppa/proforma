@@ -8,6 +8,7 @@ module Validation
     @fields.each do |field|
       field.errors = []
       field_data = @raw_data[field.name]
+      field.post_data = field_data
       field.default_validation(field_data) if field.respond_to?(:default_validation)
       field.complain_about_invalid_data(field_data) unless field_data.nil?
       field.invalidate! if field.required? && !field.filled?(field_data)

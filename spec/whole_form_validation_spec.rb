@@ -39,6 +39,12 @@ describe "A form with fields who have interdependent validations" do
     form.valid?.should be_false
   end
 
+  it "should render the entered values on failure" do
+    form = MultipleValidationTextFieldForm.new({:first_number => "2", :second_number => "7"})
+    form._noko_first("#id_first_number")[:value].should == "2"
+    form._noko_first("#id_second_number")[:value].should == "7"
+  end
+
   it "should record an error as Form.errors[:form]" do
     form = MultipleValidationTextFieldForm.new({:first_number => "2", :second_number => "7"})
     form.errors[:form].should include "First Number and Second Number must add up to 10"

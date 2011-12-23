@@ -19,7 +19,8 @@ class Field
     :help_text_tag,
     :help_text_class,
     :error_tag,
-    :error_class
+    :error_class,
+    :post_data
 
   def initialize(label_text=nil, attributes=nil, opts={})
     @label_text, @attributes, = label_text, attributes
@@ -55,6 +56,7 @@ class Field
     value_pairs[:name] ||= self.hash_wrapper_name
     value_pairs[:name] ||= self.name
     value_pairs[:id] = self.html_id
+    value_pairs[:value] = @post_data unless @post_data.nil?
     "<input #{flatten_attributes value_pairs} />"
   end
 
@@ -107,7 +109,7 @@ class TextAreaField < Field
     value_pairs[:name] ||= self.hash_wrapper_name
     value_pairs[:name] ||= self.name
     value_pairs[:id] = self.html_id
-    return "<textarea #{flatten_attributes value_pairs}></textarea>"
+    return "<textarea #{flatten_attributes value_pairs}>#{@post_data.nil? ? "" : @post_data}</textarea>"
   end
 end
 
