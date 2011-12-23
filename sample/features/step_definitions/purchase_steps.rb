@@ -46,3 +46,14 @@ Given /^there should be exactly (\d+) errors? displayed on the (.*) field$/ do |
   error_list = all("#id_#{field}_errors li").map {|e| e.text }
   error_list.length.should == error_count
 end
+
+Given /^an error reading "([^"]*)" should be displayed on the main error list$/ do |error|
+  error_list = all(".form_errors li").map {|e| e.text }
+  error_list.should include error
+end
+
+Given /^there should be exactly (\d+) errors? displayed on the main error list$/ do |error_count|
+  error_count = error_count.to_i
+  error_list = all(".form_errors li").map {|e| e.text }
+  error_list.length.should == error_count
+end

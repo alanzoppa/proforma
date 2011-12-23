@@ -57,5 +57,18 @@ Feature: Adding users
     And I enter "normal veronan cat" as my Bio
     And I affirm that I am a cat
     And I submit the User form
-    Then an error reading "Only Veronans allowed!" should be displayed on the Bio field
-    And there should be exactly 1 error displayed on the Bio field 
+    Then an error reading "Male cats only!" should be displayed on the main error list
+    And there should be exactly 1 error displayed on the main error list
+    And there should be exactly 0 errors displayed on the Bio field
+
+  Scenario: Jerk who doesn't use proper punctuation
+    Given I am on the "new user" page
+    And I enter "herpington" as my First Name
+    And I enter "b" as my Middle Initial
+    And I select "Capulet" as my Last Name
+    And I choose "Male" as my gender choice
+    And I enter "normal veronan cat" as my Bio
+    And I affirm that I am a cat
+    And I submit the User form
+    And there should be exactly 0 errors displayed on the Bio field
+    Then a user named "Herpington" should be saved

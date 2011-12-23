@@ -11,7 +11,9 @@ class RegistrationForm < Form
   end
 
   def cleaned_form(data)
-    raise FormValidationError.new("Male cats only!") if data[:gender_choice] = "Female" && data[:cat]
+    raise FormValidationError.new("Male cats only!") if data[:gender_choice] == "Female" && data[:cat]
+    data[:first_name].capitalize!
+    data[:middle_initial].capitalize!
     return data
   end
 
