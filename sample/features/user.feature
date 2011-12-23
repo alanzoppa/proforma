@@ -21,9 +21,10 @@ Feature: Adding users
     And I enter "Just your average Veronan" as my Bio
     And I deny that I am a cat
     And I submit the User form
-    Then an error reading "'First Name' is required." should be displayed
+    Then an error reading "Input must be at least 2 characters." should be displayed on the First Name field
+    And there should be exactly 1 error displayed on the First Name field
 
-  Scenario: Creating a user without supplying a name
+  Scenario: Creating a user with too short of a first name
     Given I am on the "new user" page
     And I enter "I" as my First Name
     And I enter "" as my Middle Initial
@@ -32,9 +33,10 @@ Feature: Adding users
     And I enter "Just your average Veronan" as my Bio
     And I deny that I am a cat
     And I submit the User form
-    Then an error reading "Input must be at least 2 characters." should be displayed
+    Then an error reading "Input must be at least 2 characters." should be displayed on the First Name field
+    And there should be exactly 1 error displayed on the First Name field
 
-  Scenario: Creating a user without supplying a name
+  Scenario: Creating a user who is not from Verona
     Given I am on the "new user" page
     And I enter "Jim" as my First Name
     And I enter "B" as my Middle Initial
@@ -43,4 +45,17 @@ Feature: Adding users
     And I enter "Just your average Sicilian" as my Bio
     And I affirm that I am a cat
     And I submit the User form
-    Then an error reading "Only Veronans allowed!" should be displayed
+    Then an error reading "Only Veronans allowed!" should be displayed on the Bio field
+    And there should be exactly 1 error displayed on the Bio field 
+
+  Scenario: Creating a female cat
+    Given I am on the "new user" page
+    And I enter "Herpina" as my First Name
+    And I enter "B" as my Middle Initial
+    And I select "Capulet" as my Last Name
+    And I choose "Female" as my gender choice
+    And I enter "normal veronan cat" as my Bio
+    And I affirm that I am a cat
+    And I submit the User form
+    Then an error reading "Only Veronans allowed!" should be displayed on the Bio field
+    And there should be exactly 1 error displayed on the Bio field 

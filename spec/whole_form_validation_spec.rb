@@ -24,6 +24,9 @@ describe "A form with fields who have interdependent validations" do
         if self.cleaned_data[:first_number] + self.cleaned_data[:second_number] != 10
           raise FormValidationError.new("First Number and Second Number must add up to 10")
         end
+        if data[:first_number] == 1 && data[:second_number] == 9
+          data = FormHash.import({:first_number => 5, :second_number => 5, :new_thing => "Chumpy"})
+        end
         return data
       end
 
@@ -38,7 +41,7 @@ describe "A form with fields who have interdependent validations" do
 
   it "should record an error as Form.errors[:form]" do
     form = MultipleValidationTextFieldForm.new({:first_number => "2", :second_number => "7"})
-    form.errors[:form].should == "First Number and Second Number must add up to 10"
+    form.errors[:form].should include "First Number and Second Number must add up to 10"
   end
 
   it "should not complain if the numbers sum to 10" do
@@ -60,10 +63,16 @@ describe "A form with fields who have interdependent validations" do
 
   it "should print the errors, if any, by default" do
     form = MultipleValidationTextFieldForm.new({:first_number => "3", :second_number => "6"})
-    form._noko_first(:div)[:class].should == "errors"
-    form._noko_first(:div).content.should == "First Number and Second Number must add up to 10"
+    form._noko_first(:ul)[:class].should == "form_errors"
+    form._noko_first('ul.form_errors li').content.should include "First Number and Second Number must add up to 10"
   end
 
+  it "should set both numbers to 5 and add stuff to cleaned data if the first is 1 and the second is 9" do
+    form = MultipleValidationTextFieldForm.new({:first_number => "1", :second_number => "9"})
+    form.cleaned_data[:first_number].should == 5
+    form.cleaned_data[:second_number].should == 5
+    form.cleaned_data[:new_thing].should == "Chumpy"
+  end
 end
 
 

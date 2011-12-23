@@ -26,10 +26,23 @@ Then /^I submit the (.*) form$/ do |model|
   click_button "Create #{model}"
 end
 
-Then /^the object should not be saved$/ do
-  puts page.body
-end
+#Then /^the object should not be saved$/ do
+  #puts page.body
+#end
 
 Then /^an error reading "([^"]*)" should be displayed$/ do |error|
   page.body.should include error
+end
+
+Given /^an error reading "([^"]*)" should be displayed on the (.*) field$/ do |error, field|
+  field = field.downcase.gsub(' ', '_')
+  error_list = all("#id_#{field}_errors li").map {|e| e.text }
+  error_list.should include error
+end
+
+Given /^there should be exactly (\d+) errors? displayed on the (.*) field$/ do |error_count, field|
+  error_count = error_count.to_i
+  field = field.downcase.gsub(' ', '_')
+  error_list = all("#id_#{field}_errors li").map {|e| e.text }
+  error_list.length.should == error_count
 end

@@ -3,7 +3,7 @@
 
 module Validation
 
-  def _run_simple_validations(data)
+  def _run_simple_validations(data=@_cleaned_data)
     # Set the Field's valid bit to false if a required field doesn't pass its local definition of filled?
     @fields.each do |field|
       field.errors = []
@@ -15,19 +15,20 @@ module Validation
     end
   end
 
-  def _run_whole_form_validations(data)
-    @errors = Hash.new
+  def _run_whole_form_validations
+    @errors = FormHash.new
     self.valid = true #default
     begin
-      self.cleaned_form(data) if self.respond_to?(:cleaned_form)
+      @_cleaned_data = self.cleaned_form(@_cleaned_data) if self.respond_to?(:cleaned_form)
     rescue FormValidationError => error_message
       self.invalidate!(error_message)
     end
   end
 
   def invalidate!(error_message)
-    # This will make it difficult if you want to validate a field called 'form'
-    @errors[:form] = error_message.to_s
+    # This is why there's an error if you try to create a field named "form"
+    @errors[:form] ||= Array.new
+    @errors[:form] << error_message.to_s
     @valid = false
   end
 
@@ -40,14 +41,14 @@ module Validation
     @fields.each { |f| @errors[f.name] = f.errors unless f.errors.empty?  }
   end
 
-  def _run_regex_validations(data)
+  def _run_regex_validations(data=@_cleaned_data)
     @fields.each do |field|
       field_data = @raw_data[field.name]
       field.regex_invalidate!(field.name) unless field.regex_matching_or_unset?(field_data)
     end
   end
 
-  def _run_custom_validations(data)
+  def _run_custom_validations(data=@_cleaned_data)
     @fields.each do |field|
       field_data = @raw_data[field.name]
       begin
@@ -59,7 +60,7 @@ module Validation
   end
 
   def cleaned_data
-    raise InvalidFormError.new("Cleaned data is not available on an invalid form.") unless self.valid?
+    raise InvalidFormError.new("Cleaned data is not available on an invalid form.") if not self.valid?
     return @_cleaned_data
   end
 

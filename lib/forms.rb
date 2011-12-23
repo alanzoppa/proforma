@@ -18,11 +18,11 @@ class Form
       raise ArgumentError.new("You can only validate a Hash") unless data.class.ancestors.include?(Hash)
       @raw_data = FormHash.import(data) # Rails creates POST hashes with string keys
       @_cleaned_data = @raw_data.dup
-      _run_simple_validations(data)
-      _run_regex_validations(data)
-      _run_custom_validations(data)
-      _run_whole_form_validations(data)
-      _collect_errors #Should be last
+      _run_simple_validations
+      _run_regex_validations
+      _run_custom_validations
+      _run_whole_form_validations
+      _collect_errors #Must be last
     end
   end
 
@@ -56,7 +56,10 @@ class Form
  
   def to_html(tag=@settings[:wrapper], attributes=@settings[:wrapper_attributes])
     output = String.new
-    output += wrap_tag(@errors[:form], :div, :class => :errors) unless @errors.nil? or @errors[:form].nil?
+    unless @errors.nil? or @errors[:form].nil?
+      error_list = @errors[:form].map {|error| wrap_tag(error, :li)}.join
+      output += wrap_tag(error_list, :ul, :class => :form_errors)
+    end
     @fields.each do |field|
       if @pretty_print
         output += "\n" unless @errors.nil? or @errors[:form].nil?
