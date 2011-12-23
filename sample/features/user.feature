@@ -70,5 +70,4 @@ Feature: Adding users
     And I enter "normal veronan cat" as my Bio
     And I affirm that I am a cat
     And I submit the User form
-    And there should be exactly 0 errors displayed on the Bio field
     Then a user named "Herpington" should be saved
