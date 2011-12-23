@@ -78,7 +78,7 @@ describe "A Checkbox field" do
 
   it "should retain posted values" do
     u = UglinessForm.new(:stupid => "on", :ugly=> "on")
-    puts u.to_html
+    #puts u.to_html
   end
 
 end
@@ -255,6 +255,7 @@ describe "A field with custom wrappers" do
   it "should let the user configure the hash wrapper around name attributes" do
     c = CustomNameVarForm.new
     c.fields.each do |field|
+      #puts field.to_html
       field.to_html.match(/name='something\[#{field.name}\]'/).should_not be_nil
     end
   end

@@ -30,7 +30,6 @@ class Form
     # defaults for @settings below
     @settings = {:wrapper => :p, :wrapper_attributes => nil, :pretty_print => true}
     @settings = @settings.merge(redefine_defaults) if respond_to? :redefine_defaults
-    @pretty_print = @settings[:pretty_print]
   end
 
   def _initialize_fields
@@ -46,10 +45,6 @@ class Form
     field.name = field_name.to_sym
     field.hash_wrapper_name = "#{@settings[:hash_wrapper]}[#{field_name}]" unless @settings[:hash_wrapper].nil?
     field.attach_names!(field_name) if field.respond_to?(:attach_names!)
-    field.help_text_tag = @settings[:help_text_tag] unless @settings[:help_text_tag].nil?
-    field.help_text_class = @settings[:help_text_class] unless @settings[:help_text_class].nil?
-    field.error_tag = @settings[:error_tag] unless @settings[:error_tag].nil?
-    field.error_class = @settings[:error_class] unless @settings[:error_class].nil?
     field.form_settings = @settings
     @fields << field
   end
@@ -61,7 +56,7 @@ class Form
       output += wrap_tag(error_list, :ul, :class => :form_errors)
     end
     @fields.each do |field|
-      if @pretty_print
+      if @settings[:pretty_print]
         output += "\n" unless @errors.nil? or @errors[:form].nil?
         field_contents = "\n#{indent(field.to_full_html)}\n"
         output += wrap_tag(field_contents, tag, attributes)

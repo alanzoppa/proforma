@@ -16,10 +16,6 @@ class Field
     :required,
     :valid,
     :hash_wrapper_name,
-    :help_text_tag,
-    :help_text_class,
-    :error_tag,
-    :error_class,
     :post_data
 
   def initialize(label_text=nil, attributes=nil, opts={})
@@ -33,17 +29,15 @@ class Field
 
   def _setup_options(opts)
     @opts = ({
-      #:help_text => nil,
-      #:required => false,
       :max_length_error => "Input is limited to #{opts[:max_length]} characters.",
       :min_length_error => "Input must be at least #{opts[:min_length]} characters.",
       :required_error => "'#{@label_text}' is required.",
-      :regex_error => "'#{@label_text}' contains invalid input"
+      :regex_error => "'#{@label_text}' contains invalid input",
+      :help_text_tag => :div,
+      :help_text_class => :help_text,
+      :error_tag => :ul,
+      :error_class => :field_errors,
     }).merge(opts)
-    @help_text_tag = :div
-    @help_text_class = :help_text
-    @error_tag = :ul
-    @error_class = :field_errors
   end
 
   def html_id
@@ -78,12 +72,12 @@ class Field
         field_errors += wrap_tag(e, :div)
       end
     end
-    return wrap_tag(field_errors, @error_tag, :class => @error_class, :id => "#{html_id}_errors")
+    return wrap_tag(field_errors, @opts[:error_tag], :class => @opts[:error_class], :id => "#{html_id}_errors")
   end
 
   def help_text_html
     return "" if @help_text.nil? or @help_text.empty?
-    field_help_text = wrap_tag(@help_text, @help_text_tag, :class => @help_text_class, :id => "#{html_id}_help_text")
+    field_help_text = wrap_tag(@help_text, @opts[:help_text_tag], :class => @opts[:help_text_class], :id => "#{html_id}_help_text")
     field_help_text = "#{field_help_text}\n" if @form_settings[:pretty_print]
     return field_help_text
   end
