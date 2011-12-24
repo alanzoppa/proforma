@@ -144,7 +144,7 @@ class ChoiceField < Field
   def _html_options
     html_options = @values.map { |v|
       tag_attributes = {:value => v}
-      tag_attributes[:selected] = :selected if @post_data == v
+      tag_attributes = tag_attributes.merge({:selected => "selected"}) if @post_data == v
       tag = wrap_tag(v, :option, tag_attributes)
       tag = "\n  #{tag}" if @form_settings[:pretty_print]
     }.join

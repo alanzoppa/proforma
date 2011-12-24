@@ -46,6 +46,10 @@ Feature: Adding users
     And I affirm that I am a cat
     And I submit the User form
     Then an error reading "Only Veronans allowed!" should be displayed on the Bio field
+    And the First Name field should still read "Jim"
+    And the Middle Initial field should still read "B"
+    And the Last Name field should still be set to "Montague"
+    And "Male" should still be chosen as the Gender Choice
     And there should be exactly 1 error displayed on the Bio field 
 
   Scenario: Creating a female cat
