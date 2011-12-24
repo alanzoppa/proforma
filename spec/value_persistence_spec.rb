@@ -54,8 +54,8 @@ describe "A field rendered after post" do
     @invalid_registration_form._noko_first('#id_gender_choice_male')['checked'].should == "checked"
   end
 
-  it "should not cause the gender_choice field to render a value attribute" do
-    @invalid_registration_form._noko_first('#id_gender_choice_male')['value'].should be_nil
+  it "should let the gender_choice fields keep their attributes" do
+    @invalid_registration_form._noko_first('#id_gender_choice_male')['value'].should == "Male"
   end
 
   it "should persist the value of the bio field" do

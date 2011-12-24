@@ -182,7 +182,10 @@ class RadioField < Field
   end
 
   def to_labeled_html
-    @attributes = {:checked=>:checked} if @checked
+    if @checked
+      @attributes ||= Hash.new
+      @attributes[:checked] = :checked
+    end
     output = to_html + label_tag
     output = indent(output) + "\n" if @form_settings[:pretty_print]
     return output
