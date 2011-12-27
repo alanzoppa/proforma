@@ -53,6 +53,7 @@ class Field
     value_pairs[:name] ||= self.name
     value_pairs[:id] = self.html_id
     value_pairs[:value] ||= @post_data unless @post_data.nil?
+    value_pairs[:value] ||= @opts[:default] unless @opts[:default].nil?
     "<input #{flatten_attributes value_pairs} />"
   end
 
@@ -105,7 +106,9 @@ class TextAreaField < Field
     value_pairs[:name] ||= self.hash_wrapper_name
     value_pairs[:name] ||= self.name
     value_pairs[:id] = self.html_id
-    return "<textarea #{flatten_attributes value_pairs}>#{@post_data.nil? ? "" : @post_data}</textarea>"
+    content ||= @post_data
+    content ||= @opts[:default]
+    return "<textarea #{flatten_attributes value_pairs}>#{content}</textarea>"
   end
 end
 
@@ -144,7 +147,11 @@ class ChoiceField < Field
   def _html_options
     html_options = @values.map { |v|
       tag_attributes = {:value => v}
-      tag_attributes = tag_attributes.merge({:selected => "selected"}) if @post_data == v
+      if @post_data && @post_data == v
+        tag_attributes = tag_attributes.merge({:selected => "selected"})
+      elsif @post_data.nil? && @opts[:default] == v
+        tag_attributes = tag_attributes.merge({:selected => "selected"})
+      end
       tag = wrap_tag(v, :option, tag_attributes)
       tag = "\n  #{tag}" if @form_settings[:pretty_print]
     }.join
