@@ -28,7 +28,7 @@ class Form
 
   def _define_defaults
     # defaults for @settings below
-    @settings = {:wrapper => :p, :wrapper_attributes => nil, :pretty_print => true}
+    @settings = {:wrapper => :p, :wrapper_attributes => nil}
     @settings = @settings.merge(redefine_defaults) if respond_to? :redefine_defaults
   end
 
@@ -56,14 +56,7 @@ class Form
       output += wrap_tag(error_list, :ul, :class => :form_errors)
     end
     @fields.each do |field|
-      if @settings[:pretty_print]
-        output += "\n" unless @errors.nil? or @errors[:form].nil?
-        field_contents = "\n#{indent(field.to_full_html)}\n"
-        output += wrap_tag(field_contents, tag, attributes)
-        output += "\n" unless field == @fields.last and @fields.length > 1
-      else
-        output += wrap_tag(field.to_labeled_html, tag, attributes)
-      end
+      output += wrap_tag(field.to_full_html, tag, attributes)
     end
     return output
   end
