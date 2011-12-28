@@ -160,31 +160,6 @@ class ChoiceField < Field
   end
 end
 
-class RadioField < Field
-  attr_accessor :checked
-  def initialize(value, form_settings)
-    super(label_text=nil, attributes=Hash.new, opts=Hash.new)
-    @label_text, @value = value, value
-    @attributes[:value] = @value
-    @form_settings = form_settings
-    @form_settings ||= FormHash.new
-  end
-
-  def html_id
-    "id_#{@name}_#{@value}".downcase
-  end
-
-  def to_labeled_html
-    if @checked
-      @attributes ||= Hash.new
-      @attributes[:checked] = :checked
-    end
-    output = to_html + label_tag
-    return output
-  end
-
-end
-
 class RadioChoiceField < Field
   attr_accessor :fields
 
@@ -192,8 +167,6 @@ class RadioChoiceField < Field
     super(label_text, attributes, opts)
     @opts[:default_validation_message] ||= "Not an available choice"
     @values = values
-    @fields = Array.new
-    @fields = values.map { |value| RadioField.new(value, @form_settings) }
   end
 
   def filled?(datum)
@@ -204,22 +177,12 @@ class RadioChoiceField < Field
     "id_#{@name}"
   end
 
-  def attach_names! name
-    @fields.each do |field|
-      field.hash_wrapper_name = self.hash_wrapper_name
-      field.name = name
-    end
-  end
-
   def _html_options
-    @fields.map { |v|
-      v.to_labeled_html 
-    }.join
+    @values.map { |value| single_html_from_value(value) + single_label_tag_from_value(value) }.join
   end
 
   def fieldset_legend
-    tag = wrap_tag(label_text, :legend)
-    return tag
+    wrap_tag(label_text, :legend)
   end
 
   def to_html
@@ -231,9 +194,25 @@ class RadioChoiceField < Field
       self.valid = false
       @errors << @opts[:default_validation_message]
     end
-    @fields.each { |f|
-      f.checked = :checked if f.value == @post_data
-    }
+  end
+
+  def single_html_from_value(value)
+    value_pairs = @attributes.nil? ? Hash.new : @attributes.dup
+    value_pairs[:type] = :radio
+    value_pairs[:name] ||= self.hash_wrapper_name
+    value_pairs[:name] ||= self.name
+    value_pairs[:id] = self.single_html_id(value)
+    value_pairs[:value] = value
+    value_pairs[:checked] = :checked if !@post_data.nil? && @post_data == value
+    "<input #{flatten_attributes value_pairs} />"
+  end
+
+  def single_label_tag_from_value(value)
+    wrap_tag(value, :label, {:for => single_html_id(value)})
+  end
+
+  def single_html_id(value)
+    "id_#{@name}_#{value}".downcase
   end
 
 end

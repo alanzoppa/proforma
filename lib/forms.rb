@@ -44,7 +44,6 @@ class Form
   def _attach_field_attributes(field, field_name)
     field.name = field_name.to_sym
     field.hash_wrapper_name = "#{@settings[:hash_wrapper]}[#{field_name}]" unless @settings[:hash_wrapper].nil?
-    field.attach_names!(field_name) if field.respond_to?(:attach_names!)
     field.form_settings = @settings
     @fields << field
   end
