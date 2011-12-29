@@ -198,11 +198,9 @@ class RadioChoiceField < Field
 
   def single_html_from_value(value)
     value_pairs = @attributes.nil? ? Hash.new : @attributes.dup
-    value_pairs[:type] = :radio
+    value_pairs.merge!({:type => :radio, :id => self.single_html_id(value), :value => value})
     value_pairs[:name] ||= self.hash_wrapper_name
     value_pairs[:name] ||= self.name
-    value_pairs[:id] = self.single_html_id(value)
-    value_pairs[:value] = value
     value_pairs[:checked] = :checked if !@post_data.nil? && @post_data == value
     "<input #{flatten_attributes value_pairs} />"
   end
