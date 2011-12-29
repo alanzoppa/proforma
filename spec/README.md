@@ -1,0 +1,1 @@
+Proforma is a bare-metal-as-it-needs-to-be forms library for Ruby. It is tested on rails, but strictly speaking, doesn't depend on it. In fact, there are no dependencies, except when running the test suite.
