@@ -87,7 +87,7 @@ describe "A more complicated form with multiple fields" do
     Nokogiri::HTML(@more_complicated_form.to_html).search('div.more_complicated').length.should == 4
   end
 
-  it "should produce a properly indented form" do
+  it "should produce a properly formatted form" do
     @more_complicated_form.to_html.should == [
       "<div class='more_complicated'>",
       "<label for='id_description_of_derps'>Herp some derps</label><input type='text' name='description_of_derps' id='id_description_of_derps' />",
