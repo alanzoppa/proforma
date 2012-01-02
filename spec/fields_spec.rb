@@ -83,50 +83,6 @@ describe "A Checkbox field" do
 
 end
 
-#describe "A Low-level RadioField" do
-  #tests low level behavior. RadioFields should not be used directly.
-
-  #before do
-    #class DerpForm < Form
-      #@@gender_choice = RadioField.new("Male", FormHash.new)
-    #end
-    #@gender_choice = DerpForm.new.fields[1]
-  #end
-
-
-  #it "should have the radio type" do
-    #@gender_choice._noko_first(:input)[:type].should == "radio"
-  #end
-
-  #it "should be the class var name" do
-    #@gender_choice._noko_first(:input)[:name].should == "gender_choice"
-  #end
-
-  #it "should have a name-based id" do
-    #@gender_choice._noko_first(:input)[:id].should == "id_gender_choice_male"
-  #end
-
-  #it "should properly create label tags and associate them to the input tag" do
-    #@gender_choice._noko_label_tag[:for].should == 'id_gender_choice_male'
-    #@gender_choice._noko_label_tag[:for].should == @gender_choice._noko_first(:input)[:id]
-  #end
-
-  #it "should be aware of its label text" do
-    #@gender_choice.label_text.should == 'Male'
-  #end
-
-  #it "should generate inputs with associated labels" do
-    #@gender_choice.to_labeled_html.should == "<input value='Male' type='radio' name='gender_choice' id='id_gender_choice_male' /><label for='id_gender_choice_male'>Male</label>"
-  #end
-
-#end
-
-describe "The symbolize method" do
-  it "should replace spaces with underscores" do
-    symbolize("foo bar baz").should == :foo_bar_baz
-  end
-end
-
 
 describe "A Low level Form" do
 
@@ -172,30 +128,6 @@ describe "A Form containing RadioFields" do
     @gender_form = GenderForm.new
     @gender_field = @gender_form.fields[0]
   end
-
-  #it "should have sub-fields that render correctly" do
-    #@male_field.to_html.should == "<input value='Male' type='radio' name='gender' id='id_gender_male' />"
-  #end
-
-  #it "should assign values based on symbolized entries in the array" do
-    #@female_field._noko_first(:input)[:value].should == 'Female'
-    #@male_field._noko_first(:input)[:value].should == 'Male'
-  #end
-
-  #it "should assign create a type='radio' field for each Array member" do
-    #@male_field._noko_first(:input)[:type].should == 'radio'
-    #@female_field._noko_first(:input)[:type].should == 'radio'
-  #end
-
-  #it "should name them both based on the class var" do
-    #@male_field._noko_first(:input)[:name].should == 'gender'
-    #@female_field._noko_first(:input)[:name].should == 'gender'
-  #end
-
-  #it "should base their ids on the class var and value" do
-    #@male_field._noko_first(:input)[:id].should == 'id_gender_male'
-    #@female_field._noko_first(:input)[:id].should == 'id_gender_female'
-  #end
 
   it "should create a fieldset with an id based on the class var" do
     @gender_field._noko_first(:fieldset)[:id].should == 'id_gender'

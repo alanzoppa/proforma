@@ -1,9 +1,12 @@
 def symbolize string
-  string.to_s.gsub(/ /, '_').downcase.to_sym
+  string.to_s.strip.gsub(/ /, '_').downcase.to_sym
 end
 
 def flatten_attributes(hash=nil)
-  hash.to_a.map {|key,value| "#{key}='#{value}'"}.join ' '
+  hash.to_a.map do |key,value|
+    value = value.strip if value.class == String
+    "#{key}='#{value}'"
+  end.join ' '
 end
 
 def wrap_tag(string, with=:p, attributes=nil)

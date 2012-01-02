@@ -10,6 +10,10 @@ describe "the symbolize method" do
   it "should replace spaces with underscores" do
     symbolize("foo bar baz").should == :foo_bar_baz
   end
+
+  it "should strip spaces" do
+    symbolize(" foo bar baz  ").should == :foo_bar_baz
+  end
 end
 
 describe "the wrap_tag method" do
@@ -19,5 +23,11 @@ describe "the wrap_tag method" do
 
   it "should accept an arbitrary symbol or string to replace p" do
     wrap_tag("derp", with=:span).should == "<span>derp</span>"
+  end
+end
+
+describe "the flatten_attributes method" do
+  it "should strip spaces from string values" do
+    flatten_attributes({:foo => " bar   "}).should == "foo='bar'"
   end
 end
