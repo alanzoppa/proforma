@@ -27,6 +27,7 @@ class Field
     @type = self.class.to_s.gsub(/Field$/, '').downcase
     @valid = true
     @errors = Array.new
+    @attributes ||= FormHash.new
   end
 
   def _setup_options(opts)
@@ -42,12 +43,23 @@ class Field
     }).merge(opts)
   end
 
+  def _add_frontend_attributes
+    puts "frontend attributes"
+    @attributes['data-regex'] = @opts[:regex].inspect unless @opts[:regex].nil?
+    @attributes['data-regex_error'] = @opts[:regex_error] unless @opts[:regex].nil?
+    @attributes[:class] ||= ""
+    if required
+      @attributes[:class] += " required"
+    end
+  end
+
   def html_id
     "id_#{@name}".to_sym
   end
 
   def to_html
-    value_pairs = @attributes.nil? ? Hash.new : @attributes.dup
+    _add_frontend_attributes if @form_settings[:frontend_validation]
+    value_pairs = @attributes.dup
     value_pairs[:type] = @type
     value_pairs[:name] ||= self.hash_wrapper_name
     value_pairs[:name] ||= self.name
@@ -90,7 +102,7 @@ end
 
 class TextAreaField < Field
   def to_html
-    value_pairs = @attributes.nil? ? Hash.new : @attributes.dup
+    value_pairs = @attributes.dup
     value_pairs[:name] ||= self.hash_wrapper_name
     value_pairs[:name] ||= self.name
     value_pairs[:id] = self.html_id
@@ -132,14 +144,14 @@ class ChoiceField < Field
     @values.include?(datum)
   end
 
+  def _is_selected?(v)
+    @post_data && @post_data == v || @post_data.nil? && @opts[:default] == v
+  end
+
   def _html_options
     html_options = @values.map { |v|
       tag_attributes = {:value => v}
-      if @post_data && @post_data == v
-        tag_attributes = tag_attributes.merge({:selected => "selected"})
-      elsif @post_data.nil? && @opts[:default] == v
-        tag_attributes = tag_attributes.merge({:selected => "selected"})
-      end
+      tag_attributes = tag_attributes.merge({:selected => "selected"}) if _is_selected?(v)
       tag = wrap_tag(v, :option, tag_attributes)
     }.join
   end
