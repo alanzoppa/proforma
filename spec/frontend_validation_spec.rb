@@ -26,7 +26,7 @@ describe "A Form with a TextField" do
   end
 
   it "should include data-regex attributes on text fields when @opts[:frontend_validation] == true" do
-    #@frontend_validation_form.get_instance(:first_name)._noko_first(:input)['data-regex_error'].should == "First names must start with \"F\""
+    @frontend_validation_form.get_instance(:first_name)._noko_first(:input)['data-regex_error'].should == "First names must start with \"F\""
   end
 
   #it "should add 'required' as a CSS class to required fields" do

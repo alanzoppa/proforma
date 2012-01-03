@@ -44,13 +44,12 @@ class Field
   end
 
   def _add_frontend_attributes
-    puts "frontend attributes"
     @attributes['data-regex'] = @opts[:regex].inspect unless @opts[:regex].nil?
     @attributes['data-regex_error'] = @opts[:regex_error] unless @opts[:regex].nil?
     @attributes[:class] ||= ""
-    if required
-      @attributes[:class] += " required"
-    end
+    #if required
+      #@attributes[:class] += " required"
+    #end
   end
 
   def html_id
