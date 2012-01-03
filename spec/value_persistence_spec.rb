@@ -8,10 +8,10 @@ describe "A field rendered after post" do
   before do
 
     class RegistrationForm < Form
-      @@first_name = TextField.new("First Name", nil, :min_length=>2, :max_length=>50)
-      @@middle_initial = TextField.new("Middle Initial", nil, :max_length=>1)
-      @@last_name = ChoiceField.new("Choose a family", ['Capulet', 'Montague'], nil, :required=>true)
-      @@gender_choice = RadioChoiceField.new("Choose your gender", ["Male", "Female"], nil, :required=>true)
+      @@first_name = TextField.new("First Name", :min_length=>2, :max_length=>50)
+      @@middle_initial = TextField.new("Middle Initial", :max_length=>1)
+      @@last_name = ChoiceField.new("Choose a family", ['Capulet', 'Montague'], :required=>true)
+      @@gender_choice = RadioChoiceField.new("Choose your gender", ["Male", "Female"], :required=>true)
       @@bio = TextAreaField.new("Bio")
       @@cat = CheckboxField.new("Are you a cat?", :checked => :checked )
       @@dog = CheckboxField.new("Are you a dog?")

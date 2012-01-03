@@ -6,7 +6,7 @@ require '../lib/proforma'
 describe "A form with custom validations" do
   before :each do
     class CustomValidationForm < Form
-      @@description_of_the_derps = TextField.new("Herp some derps", nil, :help_text => "Explain how derps were herped.")
+      @@description_of_the_derps = TextField.new("Herp some derps", :help_text => "Explain how derps were herped.")
       @@gender_choice = RadioChoiceField.new("Choose your gender", ["Male", "Female"])
       @@cat = CheckboxField.new("Are you a cat?", :checked => :checked )
       @@family = ChoiceField.new("Choose a family", ['Capulet', 'Montague', "Other"])
@@ -62,9 +62,9 @@ describe "A form with custom validations" do
 
     class CustomValidationFormWithOpts < Form
       @@description_of_the_derps = TextField.new("Herp some derps")
-      @@sex = RadioChoiceField.new("Choose your gender", ["Male", "Female"], nil, {:accept_any_string => true})
+      @@sex = RadioChoiceField.new("Choose your gender", ["Male", "Female"], {:accept_any_string => true})
       @@cat = CheckboxField.new("Are you a cat?", :checked => :checked )
-      @@family = ChoiceField.new("Choose a family", ['Capulet', 'Montague', "Other"], nil, {:accept_any_string => true})
+      @@family = ChoiceField.new("Choose a family", ['Capulet', 'Montague', "Other"], {:accept_any_string => true})
 
       def cleaned_description_of_the_derps(datum)
         unless datum.split == ["one", "two", "three"]

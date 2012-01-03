@@ -7,7 +7,7 @@ require '../lib/proforma'
 describe "A Form with required fields" do
   before do
     class MaxLengthFieldsForm < Form
-      @@length_form = TextField.new(label_text="Herp some derps", attributes=nil, {:required=>true, :max_length => 5, :min_length => 3})
+      @@length_form = TextField.new(label_text="Herp some derps", {:required=>true, :max_length => 5, :min_length => 3})
     end
   end
 

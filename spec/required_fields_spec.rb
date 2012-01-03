@@ -7,13 +7,13 @@ require '../lib/proforma'
 describe "A Form with required fields" do
   before do
     class SomeRequiredFieldsForm < Form
-      @@text_field = TextField.new(label_text="Herp some derps", attributes=nil, {:required=>true})
-      @@stupid = CheckboxField.new("Check here if stupid", attributes=nil, {:required=>false})
+      @@text_field = TextField.new(label_text="Herp some derps", {:required=>true})
+      @@stupid = CheckboxField.new("Check here if stupid", {:required=>false})
     end
 
     class CheckboxTextFieldForm < Form
-      @@text_field = TextField.new(label_text="Herp some derps", attributes=nil, {:required=>true})
-      @@stupid = CheckboxField.new("Check here if stupid", attributes=nil, {:required=>true})
+      @@text_field = TextField.new(label_text="Herp some derps", {:required=>true})
+      @@stupid = CheckboxField.new("Check here if stupid", {:required=>true})
     end
 
     @invalid_form = SomeRequiredFieldsForm.new({:text_field => ""})
@@ -72,7 +72,7 @@ end
 describe "A Form with a required ChoiceField" do
   before do
     class RequiredChoiceForm < Form
-      @@surname = ChoiceField.new("Choose a family", ['Capulet', 'Montague'], attributes=nil, {:required=>true})
+      @@surname = ChoiceField.new("Choose a family", ['Capulet', 'Montague'], {:required=>true})
     end
   end
 
@@ -104,7 +104,7 @@ end
 describe "A Form with a required RadioChoiceField" do
   before do
     class RequiredRadioChoiceForm < Form
-      @@surname = RadioChoiceField.new("Choose a family", ['Capulet', 'Montague'], attributes=nil, {:required=>true})
+      @@surname = RadioChoiceField.new("Choose a family", ['Capulet', 'Montague'], {:required=>true})
     end
 
     @nothing_chosen_radio_choice_form = RequiredRadioChoiceForm.new({:surname => ""})
@@ -142,9 +142,9 @@ end
 describe "Required field error messages" do
   before do
     class ErrorMessagesForm < Form
-      @@text_field = TextField.new(label_text="Herp some derps", attributes=nil, {:required=>true})
-      @@stupid = CheckboxField.new("Check here if stupid", attributes=nil, {:required=>true, :required_error => "Please confirm that you are stupid."})
-      @@surname = ChoiceField.new("Choose a family", ['Capulet', 'Montague'], attributes=nil, {:required=>true})
+      @@text_field = TextField.new(label_text="Herp some derps", {:required=>true})
+      @@stupid = CheckboxField.new("Check here if stupid", {:required=>true, :required_error => "Please confirm that you are stupid."})
+      @@surname = ChoiceField.new("Choose a family", ['Capulet', 'Montague'], {:required=>true})
     end
 
     @just_text = ErrorMessagesForm.new({:text_field => "Arbitrary string"})

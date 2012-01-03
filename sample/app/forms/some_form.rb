@@ -1,6 +1,6 @@
 class TextFieldForm < Form
-  @@name = TextField.new("Purchase", nil, :required=>true)
-  @@cost = TextField.new("Cost", nil, :required=>true)
+  @@name = TextField.new("Purchase", :required=>true)
+  @@cost = TextField.new("Cost", :required=>true)
 
   def redefine_defaults
     { :wrapper => :div, :wrapper_attributes => {:class => :field}, :hash_wrapper => :purchase }

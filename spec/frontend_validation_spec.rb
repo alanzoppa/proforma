@@ -8,10 +8,10 @@ require '../lib/proforma'
 describe "A Form with a TextField" do
   before :each do
     class FrontendValidationForm < Form
-      @@first_name = TextField.new("Enter your name", nil, :default=>"Fred", :regex => /^F/, :regex_error => "First names must start with \"F\"")
-      @@last_name = TextField.new("Enter your name", nil, :default=>"Jones", :required => true)
-      @@party = ChoiceField.new("Choose a family", ["", 'Tory', 'Labour'], nil, :default=>"Labour")
-      @@about_me = TextAreaField.new("Brief bio", nil, :default=>"Nothing important")
+      @@first_name = TextField.new("Enter your name", :default=>"Fred", :regex => /^F/, :regex_error => "First names must start with \"F\"")
+      @@last_name = TextField.new("Enter your name", :default=>"Jones", :required => true)
+      @@party = ChoiceField.new("Choose a family", ["", 'Tory', 'Labour'], :default=>"Labour")
+      @@about_me = TextAreaField.new("Brief bio", :default=>"Nothing important")
 
       def redefine_defaults
         {:frontend_validation => true}

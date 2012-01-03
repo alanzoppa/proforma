@@ -6,10 +6,10 @@ require "../lib/proforma"
 describe "A Form with default values via GET" do
   before do
     class DefaultValuesForm < Form
-      @@first_name = TextField.new("Enter your name", nil, :default=>"Fred")
-      @@last_name = TextField.new("Enter your name", nil, :default=>"Jones")
-      @@party = ChoiceField.new("Choose a family", ["", 'Tory', 'Labour'], nil, :default=>"Labour")
-      @@about_me = TextAreaField.new("Brief bio", nil, :default=>"Nothing important")
+      @@first_name = TextField.new("Enter your name", :default=>"Fred")
+      @@last_name = TextField.new("Enter your name", :default=>"Jones")
+      @@party = ChoiceField.new("Choose a family", ["", 'Tory', 'Labour'], :default=>"Labour")
+      @@about_me = TextAreaField.new("Brief bio", :default=>"Nothing important")
     end
 
     @default_values_get = DefaultValuesForm.new
@@ -35,10 +35,10 @@ end
 describe "A Form with default values via POST" do
   before do
     class DefaultValuesForm < Form
-      @@first_name = TextField.new("Enter your name", nil, :default=>"Fred")
-      @@last_name = TextField.new("Enter your name", nil, :default=>"Jones")
-      @@party = ChoiceField.new("Choose a family", ["", 'Tory', 'Labour'], nil, :default=>"Labour")
-      @@about_me = TextAreaField.new("Brief bio", nil, :default=>"Nothing important")
+      @@first_name = TextField.new("Enter your name", :default=>"Fred")
+      @@last_name = TextField.new("Enter your name", :default=>"Jones")
+      @@party = ChoiceField.new("Choose a family", ["", 'Tory', 'Labour'], :default=>"Labour")
+      @@about_me = TextAreaField.new("Brief bio", :default=>"Nothing important")
     end
 
     @default_values_post = DefaultValuesForm.new({

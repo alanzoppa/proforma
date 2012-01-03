@@ -20,14 +20,14 @@ class Field
     :value,
     :validation_mode
 
-  def initialize(label_text=nil, attributes=nil, opts={})
-    @label_text, @attributes, = label_text, attributes
+  def initialize(label_text=nil, opts={})
+    @label_text  = label_text
     _setup_options(opts)
     @help_text, @required = @opts[:help_text], @opts[:required]
     @type = self.class.to_s.gsub(/Field$/, '').downcase
     @valid = true
     @errors = Array.new
-    @attributes ||= FormHash.new
+    @attributes = @opts[:html_attributes]
   end
 
   def _setup_options(opts)
@@ -40,6 +40,7 @@ class Field
       :help_text_class => :help_text,
       :error_tag => :ul,
       :error_class => :field_errors,
+      :html_attributes => FormHash.new
     }).merge(opts)
   end
 
@@ -133,8 +134,8 @@ class CheckboxField < Field
 end
 
 class ChoiceField < Field
-  def initialize(label_text=nil, values=nil, attributes=nil, opts={})
-    super(label_text, attributes, opts)
+  def initialize(label_text=nil, values=nil, opts={})
+    super(label_text, opts)
     @opts[:default_validation_message] ||= "Not an available choice"
     @values = values
   end
@@ -174,8 +175,8 @@ end
 class RadioChoiceField < Field
   attr_accessor :fields
 
-  def initialize(label_text=nil, values=nil, attributes=nil, opts={})
-    super(label_text, attributes, opts)
+  def initialize(label_text=nil, values=nil, opts={})
+    super(label_text, opts)
     @opts[:default_validation_message] ||= "Not an available choice"
     @values = values
   end

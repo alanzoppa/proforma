@@ -7,7 +7,7 @@ require '../lib/proforma'
 describe "A text form with required validations" do
   before do
     class RegexForm < Form
-      @@text_field = TextField.new(label_text="Herp some derps", attributes=nil, opts={:regex=>/^foo/})
+      @@text_field = TextField.new(label_text="Herp some derps", opts={:regex=>/^foo/})
     end
   end
 
@@ -28,7 +28,7 @@ end
 describe "A text form with required validations and custom error messages" do
   before do
     class CustomRegexForm < Form
-      @@text_field = TextField.new(label_text="Herp some derps", attributes=nil, opts={:regex=>/^foo/, :regex_error => "Entry should start with 'foo'"})
+      @@text_field = TextField.new(label_text="Herp some derps", opts={:regex=>/^foo/, :regex_error => "Entry should start with 'foo'"})
     end
   end
 

@@ -65,9 +65,9 @@ describe "A more complicated form with multiple fields" do
 
   before do
     class MoreComplicatedForm < Form
-      @@description_of_derps = TextField.new("Herp some derps", nil, :help_text => "Explain how the derps were herped")
+      @@description_of_derps = TextField.new("Herp some derps", :help_text => "Explain how the derps were herped")
       @@gender_choice = RadioChoiceField.new("Choose your gender", ["Male", "Female"])
-      @@cat = CheckboxField.new("Are you a cat?", :checked => :checked )
+      @@cat = CheckboxField.new("Are you a cat?", :html_attributes => {:checked => :checked} )
       @@family = ChoiceField.new("Choose a family", ['Capulet', 'Montague', "Other"])
 
       def redefine_defaults

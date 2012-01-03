@@ -8,7 +8,7 @@ describe "A Low level TextField" do
 
   before do
     class DerpForm < Form
-      @@derp_field = TextField.new("Herp some derps", nil, :max_length=>2)
+      @@derp_field = TextField.new("Herp some derps", :max_length=>2)
     end
     @derp_field = DerpForm.new.fields[0]
   end
@@ -89,7 +89,7 @@ describe "A Low level Form" do
   before do
     class LoginForm < Form
       @@username = TextField.new("Username")
-      @@password = TextField.new("Password", :class => :pw)
+      @@password = TextField.new("Password", :html_attributes => {:class => :pw})
       @@herp = "derp"
     end
     @login_form = LoginForm.new
@@ -106,7 +106,7 @@ describe "A Low level Form" do
 
   it "should accept a hash of attributes" do
     class OptInForm < Form
-      @@future_communications = CheckboxField.new("Would you like to receive future communications", :checked => :checked )
+      @@future_communications = CheckboxField.new("Would you like to receive future communications", :html_attributes => {:checked => :checked} )
     end
     @opt_in_form = OptInForm.new
 
@@ -168,7 +168,7 @@ describe "A field with custom wrappers" do
     class CustomNameVarForm < Form
       @@description_of_derps = TextField.new("Herp some derps")
       @@gender_choice = RadioChoiceField.new("Choose your gender", ["Male", "Female"])
-      @@cat = CheckboxField.new("Are you a cat?", :checked => :checked )
+      @@cat = CheckboxField.new("Are you a cat?", :html_attributes => {:checked => :checked} )
       @@family = ChoiceField.new("Choose a family", ['Capulet', 'Montague', "Other"])
 
       def redefine_defaults
@@ -195,7 +195,7 @@ end
 describe "A Textarea field" do
   before do
     class TextAreaForm < Form
-      @@bio = TextAreaField.new("Herp some derps", nil, :help_text => "Fill in this form", :min_length => 2)
+      @@bio = TextAreaField.new("Herp some derps", :help_text => "Fill in this form", :min_length => 2)
     end
 
     @form = TextAreaForm.new
