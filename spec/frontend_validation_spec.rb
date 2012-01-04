@@ -57,7 +57,14 @@ describe "A from with lazy regex validations" do
       @@middle_initial = TextField.new("Middle Initial", :max_length=>1)
       @@last_name = ChoiceField.new("Choose a family", ['Capulet', 'Montague'], :required=>true)
       @@gender_choice = RadioChoiceField.new("Choose your gender", ["Male", "Female"], :required=>true)
-      @@bio = TextAreaField.new("Bio", :required=>true, :min_length=>10, :max_length=>300, :regex => /Veronan/i, :regex_error => "Only Veronans allowed!")
+      @@bio = TextAreaField.new("Bio",
+                                :required=>true,
+                                :min_length=>10,
+                                :min_length_error => "Bork bork ten characters bork",
+                                :max_length=>300,
+                                :regex => /Veronan/i,
+                                :regex_error => "Only Veronans allowed!"
+                               )
       @@cat = CheckboxField.new("Are you a cat?", :html_attributes => {:checked => :checked} )
 
       def redefine_defaults
@@ -81,7 +88,16 @@ describe "A from with lazy regex validations" do
   end
 
   it "should include data-regex_error attributes on text fields when @opts[:frontend_validation] == true" do
-    @registration_form.get_instance(:first_name)._noko_first(:input)['data-regex_error'].should == "First names must start with \"F\""
+    #Nokogiri mangles this attribute for some reason
+    @registration_form.get_instance(:first_name).to_html.match(/data-regex_error="First names must start with \\\"F\\\""/).should_not be_nil
+  end
+
+  it "should include data-regex attributes on textareas when @opts[:frontend_validation] == true" do
+    @registration_form.get_instance(:bio)._noko_first(:textarea)['data-regex'].should == "/Veronan/i"
+  end
+
+  it "should include data-regex_error attributes on textareas when @opts[:frontend_validation] == true" do
+    @registration_form.get_instance(:bio)._noko_first(:textarea)['data-regex_error'].should == "Only Veronans allowed!"
   end
 
   it "should include data-min_length attributes on text fields when @opts[:frontend_validation] == true" do
@@ -100,7 +116,12 @@ describe "A from with lazy regex validations" do
     @registration_form.get_instance(:bio)._noko_first(:textarea)['data-max_length'].should == "300"
   end
 
+  it "should include data-min_length_error attributes on textareas when @opts[:frontend_validation] == true" do
+    @registration_form.get_instance(:bio)._noko_first(:textarea)['data-min_length_error'].should == "Bork bork ten characters bork"
+  end
 
-
+  it "should include data-max_length_error attributes on textareas when @opts[:frontend_validation] == true" do
+    @registration_form.get_instance(:bio)._noko_first(:textarea)['data-max_length_error'].should == "Input is limited to 300 characters."
+  end
 
 end

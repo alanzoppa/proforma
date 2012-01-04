@@ -28,6 +28,14 @@ end
 
 describe "the flatten_attributes method" do
   it "should strip spaces from string values" do
-    flatten_attributes({:foo => " bar   "}).should == "foo='bar'"
+    flatten_attributes({:foo => " bar   "}).should == "foo=\"bar\""
   end
+end
+
+
+describe "the escape_single_quotes method" do
+  it "should escape single quotes" do
+    escape_single_quotes("something ''' foo ' ba'ar").should == "something \\'\\'\\' foo \\' ba\\'ar"
+  end
+
 end

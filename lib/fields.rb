@@ -3,6 +3,7 @@ require '../spec/test_module' if $test_env
 require 'helpers'
 require 'exceptions'
 require 'validation'
+require 'json'
 
 class Field
   include TestModule if $test_env
@@ -52,10 +53,12 @@ class Field
   end
 
   def _add_frontend_attributes
-    @opts[:html_attributes]['data-regex'] = @opts[:regex].inspect unless @opts[:regex].nil?
-    @opts[:html_attributes]['data-regex_error'] = @opts[:regex_error] unless @opts[:regex].nil?
+    @opts[:html_attributes]['data-regex'] = escape_single_quotes(@opts[:regex].inspect) unless @opts[:regex].nil?
+    @opts[:html_attributes]['data-regex_error'] = escape_single_quotes(@opts[:regex_error]) unless @opts[:regex].nil?
     @opts[:html_attributes]['data-max_length'] = @opts[:max_length] unless @opts[:max_length].nil?
     @opts[:html_attributes]['data-min_length'] = @opts[:min_length] unless @opts[:min_length].nil?
+    @opts[:html_attributes]['data-max_length_error'] = escape_single_quotes(@opts[:max_length_error]) unless @opts[:max_length].nil?
+    @opts[:html_attributes]['data-min_length_error'] = escape_single_quotes(@opts[:min_length_error]) unless @opts[:min_length].nil?
     _add_required_class_if_needed
   end
 

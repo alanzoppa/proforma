@@ -26,11 +26,11 @@ describe "A Low level TextField" do
   end
 
   it "should be able to template basic field types" do
-    @derp_field.to_html.should == "<input type='text' name='derp_field' id='id_derp_field' />"
+    @derp_field.to_html.should == "<input type=\"text\" name=\"derp_field\" id=\"id_derp_field\" />"
   end
 
   it "should generate its own labels" do
-    @derp_field.label_tag.should == "<label for='id_derp_field'>Herp some derps</label>"
+    @derp_field.label_tag.should == "<label for=\"id_derp_field\">Herp some derps</label>"
     @derp_field.label_text.should == "Herp some derps"
   end
 
@@ -73,7 +73,7 @@ describe "A Checkbox field" do
   end
 
   it "should render correctly" do
-    @stupid_field.to_labeled_html.should == "<input type='checkbox' name='stupid' id='id_stupid' /><label for='id_stupid'>Check here if stupid</label>"
+    @stupid_field.to_labeled_html.should == "<input type=\"checkbox\" name=\"stupid\" id=\"id_stupid\" /><label for=\"id_stupid\">Check here if stupid</label>"
   end
 
   it "should retain posted values" do
@@ -99,8 +99,8 @@ describe "A Low level Form" do
   it "should correctly report its fields in the defined order" do
     fields_as_strings = @login_form.fields.map {|f| f.to_html}
     fields_as_strings.should == [
-      "<input type='text' name='username' id='id_username' />",
-      "<input class='pw' type='text' name='password' id='id_password' />",
+      "<input type=\"text\" name=\"username\" id=\"id_username\" />",
+      "<input class=\"pw\" type=\"text\" name=\"password\" id=\"id_password\" />",
     ]
   end
 
@@ -112,7 +112,7 @@ describe "A Low level Form" do
 
     fields_as_strings = @opt_in_form.fields.map {|f| f.to_html}
     fields_as_strings.should == [
-      "<input checked='checked' type='checkbox' name='future_communications' id='id_future_communications' />"
+      "<input checked=\"checked\" type=\"checkbox\" name=\"future_communications\" id=\"id_future_communications\" />"
     ]
   end
 
@@ -151,7 +151,7 @@ describe "A Form containing ChoiceFields" do
   end
 
   it "should generate a list of html options" do
-    @surname_field._html_options.should == "<option value='Capulet'>Capulet</option><option value='Montague'>Montague</option>"
+    @surname_field._html_options.should == "<option value=\"Capulet\">Capulet</option><option value=\"Montague\">Montague</option>"
   end
 
   it "should generate a complete select field" do
@@ -186,7 +186,7 @@ describe "A field with custom wrappers" do
     c = CustomNameVarForm.new
     c.fields.each do |field|
       #puts field.to_html
-      field.to_html.match(/name='something\[#{field.name}\]'/).should_not be_nil
+      field.to_html.match(/name=\"something\[#{field.name}\]\"/).should_not be_nil
     end
   end
 end
