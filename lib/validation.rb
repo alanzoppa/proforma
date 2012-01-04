@@ -74,7 +74,7 @@ end
 
 module FieldValidation
   def required?
-    self.required
+    @opts[:required]
   end
 
   def valid?

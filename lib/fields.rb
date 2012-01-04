@@ -13,7 +13,7 @@ class Field
     :help_text,
     :errors,
     :form_settings,
-    :required,
+    :opts,
     :valid,
     :hash_wrapper_name,
     :post_data,
@@ -27,7 +27,6 @@ class Field
     @type = self.class.to_s.gsub(/Field$/, '').downcase
     @valid = true
     @errors = Array.new
-    @attributes = @opts[:html_attributes]
   end
 
   def _setup_options(opts)
@@ -45,11 +44,11 @@ class Field
   end
 
   def _add_frontend_attributes
-    @attributes['data-regex'] = @opts[:regex].inspect unless @opts[:regex].nil?
-    @attributes['data-regex_error'] = @opts[:regex_error] unless @opts[:regex].nil?
-    @attributes[:class] ||= ""
+    @opts[:html_attributes]['data-regex'] = @opts[:regex].inspect unless @opts[:regex].nil?
+    @opts[:html_attributes]['data-regex_error'] = @opts[:regex_error] unless @opts[:regex].nil?
+    @opts[:html_attributes][:class] ||= ""
     #if required
-      #@attributes[:class] += " required"
+      #@opts[:html_attributes][:class] += " required"
     #end
   end
 
@@ -59,7 +58,7 @@ class Field
 
   def to_html
     _add_frontend_attributes if @form_settings[:frontend_validation]
-    value_pairs = @attributes.dup
+    value_pairs = @opts[:html_attributes].dup
     value_pairs[:type] = @type
     value_pairs[:name] ||= self.hash_wrapper_name
     value_pairs[:name] ||= self.name
@@ -102,7 +101,7 @@ end
 
 class TextAreaField < Field
   def to_html
-    value_pairs = @attributes.dup
+    value_pairs = @opts[:html_attributes].dup
     value_pairs[:name] ||= self.hash_wrapper_name
     value_pairs[:name] ||= self.name
     value_pairs[:id] = self.html_id
@@ -114,11 +113,11 @@ end
 
 class CheckboxField < Field
   def to_labeled_html
-    @attributes ||= FormHash.new
+    @opts[:html_attributes] ||= FormHash.new
     if @post_data
-      @attributes[:checked] = :checked
+      @opts[:html_attributes][:checked] = :checked
     elsif @validation_mode
-      @attributes.delete(:checked)
+      @opts[:html_attributes].delete(:checked)
     end
     to_html + label_tag
   end
@@ -209,7 +208,7 @@ class RadioChoiceField < Field
   end
 
   def single_html_from_value(value)
-    value_pairs = @attributes.nil? ? Hash.new : @attributes.dup
+    value_pairs = @opts[:html_attributes].nil? ? Hash.new : @opts[:html_attributes].dup
     value_pairs.merge!({:type => :radio, :id => self.single_html_id(value), :value => value})
     value_pairs[:name] ||= self.hash_wrapper_name
     value_pairs[:name] ||= self.name
