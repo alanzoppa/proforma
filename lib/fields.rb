@@ -23,7 +23,7 @@ class Field
   def initialize(label_text=nil, opts={})
     @label_text  = label_text
     _setup_options(opts)
-    @help_text, @required = @opts[:help_text], @opts[:required]
+    @help_text = @opts[:help_text]
     @type = self.class.to_s.gsub(/Field$/, '').downcase
     @valid = true
     @errors = Array.new
@@ -33,6 +33,7 @@ class Field
     @opts = ({
       :max_length_error => "Input is limited to #{opts[:max_length]} characters.",
       :min_length_error => "Input must be at least #{opts[:min_length]} characters.",
+      :required_class => :required,
       :required_error => "'#{@label_text}' is required.",
       :regex_error => "'#{@label_text}' contains invalid input",
       :help_text_tag => :div,
@@ -43,13 +44,17 @@ class Field
     }).merge(opts)
   end
 
+  def _add_required_class_if_needed
+    if required?
+      @opts[:html_attributes][:class] ||= ""
+      @opts[:html_attributes][:class] += " #{@opts[:required_class]}" unless @opts[:html_attributes][:class].match /\b#{@opts[:required_class]}\b/
+    end
+  end
+
   def _add_frontend_attributes
     @opts[:html_attributes]['data-regex'] = @opts[:regex].inspect unless @opts[:regex].nil?
     @opts[:html_attributes]['data-regex_error'] = @opts[:regex_error] unless @opts[:regex].nil?
-    @opts[:html_attributes][:class] ||= ""
-    #if required
-      #@opts[:html_attributes][:class] += " required"
-    #end
+    _add_required_class_if_needed
   end
 
   def html_id
@@ -101,6 +106,7 @@ end
 
 class TextAreaField < Field
   def to_html
+    _add_frontend_attributes if @form_settings[:frontend_validation]
     value_pairs = @opts[:html_attributes].dup
     value_pairs[:name] ||= self.hash_wrapper_name
     value_pairs[:name] ||= self.name
@@ -158,8 +164,11 @@ class ChoiceField < Field
   def to_html
     usable_name ||= self.hash_wrapper_name
     usable_name ||= self.name
+    @opts[:html_attributes] ||= FormHash.new
+    @opts[:html_attributes] = @opts[:html_attributes].merge({:id => html_id, :name => usable_name})
+    _add_required_class_if_needed
     option_fields = _html_options
-    output = wrap_tag(option_fields, :select, {:id => html_id, :name => usable_name})
+    output = wrap_tag(option_fields, :select, @opts[:html_attributes])
     return output
   end
 
@@ -197,7 +206,9 @@ class RadioChoiceField < Field
   end
 
   def to_html
-    wrap_tag(fieldset_legend + self._html_options, :fieldset, {:id => html_id})
+    _add_required_class_if_needed
+    @opts[:html_attributes][:id] = html_id
+    wrap_tag(fieldset_legend + self._html_options, :fieldset, @opts[:html_attributes])
   end
 
   def default_validation(datum)
