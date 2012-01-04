@@ -54,6 +54,8 @@ class Field
   def _add_frontend_attributes
     @opts[:html_attributes]['data-regex'] = @opts[:regex].inspect unless @opts[:regex].nil?
     @opts[:html_attributes]['data-regex_error'] = @opts[:regex_error] unless @opts[:regex].nil?
+    @opts[:html_attributes]['data-max_length'] = @opts[:max_length] unless @opts[:max_length].nil?
+    @opts[:html_attributes]['data-min_length'] = @opts[:min_length] unless @opts[:min_length].nil?
     _add_required_class_if_needed
   end
 
