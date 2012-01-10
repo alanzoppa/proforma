@@ -86,6 +86,10 @@ class Field
     label_tag + to_html
   end
 
+  def set_default!(value)
+    @opts[:default] = value
+  end
+
   def error_html
     return "" if @errors.nil? or @errors.empty?
     field_errors = String.new
@@ -141,6 +145,11 @@ class CheckboxField < Field
   def filled?(datum)
     datum.class == TrueClass
   end
+
+  def set_default!(bool)
+    @opts[:html_attributes][:checked] = :checked if bool == true
+    @opts[:html_attributes].delete(:checked) if bool == false
+  end
 end
 
 class ChoiceField < Field
@@ -156,6 +165,10 @@ class ChoiceField < Field
 
   def _is_selected?(v)
     @post_data && @post_data == v || @post_data.nil? && @opts[:default] == v
+  end
+
+  def set_default!(value)
+    @opts[:default] = value
   end
 
   def _html_options
@@ -228,7 +241,9 @@ class RadioChoiceField < Field
     value_pairs.merge!({:type => :radio, :id => self.single_html_id(value), :value => value})
     value_pairs[:name] ||= self.hash_wrapper_name
     value_pairs[:name] ||= self.name
-    value_pairs[:checked] = :checked if !@post_data.nil? && @post_data == value
+    if !@post_data.nil? && @post_data == value || @post_data.nil? && @opts[:default] == value
+      value_pairs[:checked] = :checked 
+    end
     "<input #{flatten_attributes value_pairs} />"
   end
 

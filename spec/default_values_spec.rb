@@ -10,6 +10,7 @@ describe "A Form with default values via GET" do
       @@last_name = TextField.new("Enter your name", :default=>"Jones")
       @@party = ChoiceField.new("Choose a family", ["", 'Tory', 'Labour'], :default=>"Labour")
       @@about_me = TextAreaField.new("Brief bio", :default=>"Nothing important")
+      @@gender_choice = RadioChoiceField.new("Choose your gender", ["Male", "Female"], :default => "Female")
     end
 
     @default_values_get = DefaultValuesForm.new
@@ -28,6 +29,11 @@ describe "A Form with default values via GET" do
     @default_values_get.get_instance(:about_me)._noko_first(:textarea).content.should == "Nothing important"
   end
 
+  it "should render default values on RadioChoiceFields" do
+    @default_values_get.get_instance(:gender_choice)._noko_first("input#id_gender_choice_female")[:checked].should == "checked"
+    @default_values_get.get_instance(:gender_choice)._noko_first("input#id_gender_choice_male")[:checked].should be_nil
+  end
+
 end
 
 
@@ -39,6 +45,7 @@ describe "A Form with default values via POST" do
       @@last_name = TextField.new("Enter your name", :default=>"Jones")
       @@party = ChoiceField.new("Choose a family", ["", 'Tory', 'Labour'], :default=>"Labour")
       @@about_me = TextAreaField.new("Brief bio", :default=>"Nothing important")
+      @@gender_choice = RadioChoiceField.new("Choose your gender", ["Male", "Female"], :default => "Female")
     end
 
     @default_values_post = DefaultValuesForm.new({
@@ -46,6 +53,7 @@ describe "A Form with default values via POST" do
       :last_name => "Smith",
       :party => "",
       :about_me => "Important stuff",
+      :gender_choice => "Male",
       :other_thing => "Thing 3" })
   end
 
@@ -60,6 +68,11 @@ describe "A Form with default values via POST" do
 
   it "should render posted values on TextAreaFields" do
     @default_values_post.get_instance(:about_me)._noko_first(:textarea).content.should == "Important stuff"
+  end
+
+  it "should render posted values on RadioChoiceFields" do
+    @default_values_post.get_instance(:gender_choice)._noko_first("input#id_gender_choice_male")[:checked].should == "checked"
+    @default_values_post.get_instance(:gender_choice)._noko_first("input#id_gender_choice_female")[:checked].should be_nil
   end
 
 end

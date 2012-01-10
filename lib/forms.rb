@@ -63,8 +63,8 @@ class Form
   def with_defaults(hash)
     hash = FormHash.import(hash)
     hash.keys.each do |key|
-      self.get_instance(key).opts[:default] = hash[key]
-      #self.get_instance(key).opts[:default] = hash[key]
+      field = self.get_instance(key)
+      field.set_default!(hash[key])
     end
     return self
   end
