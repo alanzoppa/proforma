@@ -24,10 +24,11 @@ describe "instantiating a form with custom defaults" do
     @custom_defaults_form.get_instance(:bio)._noko_first(:textarea).content.should == "Blinded in The Event"
   end
 
-  #it "should set the value of the gender_choice field as given" do
-    #@custom_defaults_form = CustomValidationForm.new.with_defaults(:gender_choice => "Female")
-    #puts @custom_defaults_form.get_instance(:gender_choice).to_html
-  #end
+  it "should set the value of the gender_choice field as given" do
+    @custom_defaults_form = CustomValidationForm.new.with_defaults(:gender_choice => "Female")
+    @custom_defaults_form.get_instance(:gender_choice)._noko_first("input#id_gender_choice_female")[:checked].should == "checked"
+    @custom_defaults_form.get_instance(:gender_choice)._noko_first("input#id_gender_choice_male")[:checked].should be_nil
+  end
   
   it "should null the checked value of the cat field if passed false" do
     @custom_defaults_form = CustomValidationForm.new.with_defaults( :cat => false )
@@ -43,10 +44,23 @@ describe "instantiating a form with custom defaults" do
     @custom_defaults_form = CustomValidationForm.new.with_defaults(:family => "Montague")
     @custom_defaults_form.get_instance(:family)._noko_nth(:option, 1)[:selected].should == "selected"
   end
- 
 
-  #it "should set the value of the family field as given"
-
+  it "should handle all at once" do
+    hash = {
+      :description_of_the_derps => "derps were herped effectively",
+      :bio => "Blinded in The Event",
+      :gender_choice => "Female",
+      :cat => false,
+      :family => "Montague",
+    }
+    @custom_defaults_form = CustomValidationForm.new.with_defaults(hash)
+    @custom_defaults_form.get_instance(:description_of_the_derps)._noko_first(:input)[:value].should == "derps were herped effectively"
+    @custom_defaults_form.get_instance(:bio)._noko_first(:textarea).content.should == "Blinded in The Event"
+    @custom_defaults_form.get_instance(:gender_choice)._noko_first("input#id_gender_choice_female")[:checked].should == "checked"
+    @custom_defaults_form.get_instance(:gender_choice)._noko_first("input#id_gender_choice_male")[:checked].should be_nil
+    @custom_defaults_form.get_instance(:cat)._noko_first(:input)[:checked].should be_nil
+    @custom_defaults_form.get_instance(:family)._noko_nth(:option, 1)[:selected].should == "selected"
+  end
 
 
 end
